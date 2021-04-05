@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Community Shovel</string>
+    <string name="question_message_text">Is Chicago the capital of Illinois?</string>
+    <string name="home_button_text"> Home </string>
+    <string name="create_request_button_text"> Create Request </string>
+    <string name="profile_button_text"> View Profile </string>
+    <string name="desc"> image </string>
+    <string name="your_profile_text"> Your Profile </string>
+</resources>
