@@ -2,6 +2,7 @@ package com.uxmen.communityshovel;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +17,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.uxmen.communityshovel.R;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
     private static String DEBUG = "DEBUG";
     private static final String KEY = "KEY";
@@ -31,14 +30,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Log.d(DEBUG, "onCreate()");
         setContentView(R.layout.activity_main);
+        
         if (savedInstanceState != null) {
             String s = new String(savedInstanceState.getString(KEY));
             Log.d(DEBUG, s);
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+            .findFragmentById(R.id.map);
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
@@ -50,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onMapReady(GoogleMap map) {
+        /*
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(40.1164, -88.2434))
                 .title("Marker"));
+        */
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(40.1164, -88.2434), 15));
     }
@@ -96,10 +97,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.home_button) {
             Toast.makeText(this, "Going Home", Toast.LENGTH_SHORT).show();
+            switchActivity(MainActivity.class);
         } else if (v.getId() == R.id.create_request_button) {
             Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.profile_button) {
             Toast.makeText(this, "Viewing Profile", Toast.LENGTH_SHORT).show();
+            switchActivity(YourProfile.class);
         }
+    }
+
+    public void switchActivity(final Class<? extends AppCompatActivity> activity) {
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
     }
 }
