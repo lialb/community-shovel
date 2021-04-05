@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import cs465.uxmen.communityshovel.R;
+import com.uxmen.communityshovel.R;
 
 public class YourProfile extends AppCompatActivity {
 
