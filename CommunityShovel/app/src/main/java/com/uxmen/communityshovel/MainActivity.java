@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String DEBUG = "DEBUG";
     private static final String KEY = "KEY";
     private static final String DATA = "We passed the bundle of data";
+    private SupportMapFragment mapFragment;
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
@@ -35,9 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String s = new String(savedInstanceState.getString(KEY));
             Log.d(DEBUG, s);
         }
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
             .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
@@ -49,11 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onMapReady(GoogleMap map) {
-        /*
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(40.1164, -88.2434))
                 .title("Marker"));
-        */
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(40.1164, -88.2434), 15));
     }
