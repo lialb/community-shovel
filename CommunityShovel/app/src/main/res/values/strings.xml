@@ -11,7 +11,7 @@
     <string name="last_name_label"> Last Name: </string>
     <string name="last_name_text"> Smith </string>
     <string name="email_label"> Email: </string>
-    <string name="email_text"> vivian.smith@gmail.com </string>
+    <string name="email_text"> vivian_smith@gmail.com </string>
     <string name="distance_shoveled_label"> Distance Shoveled: </string>
     <string name="distance_shoveled_text"> 3 miles </string>
     <string name="people_impacted_label"> People Impacted: </string>
