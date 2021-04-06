@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -14,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -51,9 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onMapReady(GoogleMap map) {
+        final LatLng curLocation = new LatLng(40.1164, -88.2434);
         map.addMarker(new MarkerOptions()
-                .position(new LatLng(40.1164, -88.2434))
-                .title("Marker"));
+                .position(curLocation)
+                .title("Marker")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(40.1164, -88.2434), 15));
     }
