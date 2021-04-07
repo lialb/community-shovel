@@ -90,37 +90,17 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
 
                         try {
                             firstName = response.getString("first_name");
+                            lastName = response.getString("last_name");
+                            email = response.getString("email");
+                            distanceShoveled = response.getString("distance_shoveled");
+                            peopleImpacted = response.getString("people_impacted");
                         } catch (JSONException e) {
                               Log.e("JSON Exception", e.getMessage());
                         }
                         textViewFirstName.setText(firstName);
-
-                        try {
-                            lastName = response.getString("last_name");
-                        } catch (JSONException e) {
-                            Log.e("JSON Exception", e.getMessage());
-                        }
                         textViewLastName.setText(lastName);
-
-                        try {
-                            email = response.getString("email");
-                        } catch (JSONException e) {
-                            Log.e("JSON Exception", e.getMessage());
-                        }
                         textViewEmail.setText(email);
-
-                        try {
-                            distanceShoveled = response.getString("distance_shoveled");
-                        } catch (JSONException e) {
-                            Log.e("JSON Exception", e.getMessage());
-                        }
                         textViewDistanceShoveled.setText(distanceShoveled);
-
-                        try {
-                            peopleImpacted = response.getString("people_impacted");
-                        } catch (JSONException e) {
-                            Log.e("JSON Exception", e.getMessage());
-                        }
                         textViewPeopleImpacted.setText(peopleImpacted);
                     }
                 }, new Response.ErrorListener() {
