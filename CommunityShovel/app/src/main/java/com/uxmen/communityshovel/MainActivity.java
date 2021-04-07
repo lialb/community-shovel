@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .position(curLocation)
                 .title("Marker")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(40.1164, -88.2434), 15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, 15));
     }
     protected void onSaveInstanceState(Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -94,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         Log.d(DEBUG, "OnDestroy()");
     }
-
 
     public void onClick(View v) {
         if (v.getId() == R.id.home_button) {

@@ -7,7 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class YourProfile extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,6 +45,8 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
+
+        fillUserInfo();
     }
 
     protected void onSaveInstanceState(Bundle savedInstance) {
@@ -54,6 +65,76 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
             Toast.makeText(this, "Viewing Profile", Toast.LENGTH_SHORT).show();
             switchActivity(YourProfile.class);
         }
+    }
+
+    public void fillUserInfo() {
+        final TextView textViewFirstName = (TextView) findViewById(R.id.first_name_text);
+        final TextView textViewLastName = (TextView) findViewById(R.id.last_name_text);
+        final TextView textViewEmail = (TextView) findViewById(R.id.email_text);
+        final TextView textViewDistanceShoveled = (TextView) findViewById(R.id.distance_shoveled_text);
+        final TextView textViewPeopleImpacted = (TextView) findViewById(R.id.people_impacted_text);
+
+        // Instantiate the RequestQueue.
+        String url ="http://10.0.2.2:5000/get-user/0";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String firstName = "";
+                        String lastName = "";
+                        String email = "";
+                        String distanceShoveled = "";
+                        String peopleImpacted = "";
+
+                        try {
+                            firstName = response.getString("first_name");
+                        } catch (JSONException e) {
+                              Log.e("JSON Exception", e.getMessage());
+                        }
+                        textViewFirstName.setText(firstName);
+
+                        try {
+                            lastName = response.getString("last_name");
+                        } catch (JSONException e) {
+                            Log.e("JSON Exception", e.getMessage());
+                        }
+                        textViewLastName.setText(lastName);
+
+                        try {
+                            email = response.getString("email");
+                        } catch (JSONException e) {
+                            Log.e("JSON Exception", e.getMessage());
+                        }
+                        textViewEmail.setText(email);
+
+                        try {
+                            distanceShoveled = response.getString("distance_shoveled");
+                        } catch (JSONException e) {
+                            Log.e("JSON Exception", e.getMessage());
+                        }
+                        textViewDistanceShoveled.setText(distanceShoveled);
+
+                        try {
+                            peopleImpacted = response.getString("people_impacted");
+                        } catch (JSONException e) {
+                            Log.e("JSON Exception", e.getMessage());
+                        }
+                        textViewPeopleImpacted.setText(peopleImpacted);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        textViewFirstName.setText("That didn't work!");
+                        Log.e("Volly Error", error.toString());
+                    }
+                });
+
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
     }
 
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {

@@ -79,7 +79,7 @@ def add_comment(request_id):
 
     next_index = len(comments)
     data = { next_index : { 'comment' : body['comment'], 'name' : body['name'], 'user_id' : body['user_id'] } }
-    db.child('reqeuests').child(request_id).child('comments').push(data)
+    db.child('requests').child(request_id).child('comments').push(data)
     return 'Successfully added comment'
 
 @app.route('/get-user/<string:user_id>')

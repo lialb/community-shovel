@@ -7,16 +7,9 @@
     <string name="desc"> image </string>
     <string name="your_profile_text"> Your Profile </string>
     <string name="first_name_label"> First Name: </string>
-    <string name="first_name_text"> Vivian </string>
     <string name="last_name_label"> Last Name: </string>
-    <string name="last_name_text"> Smith </string>
     <string name="email_label"> Email: </string>
-    <string name="email_text"> vivian_smith@gmail.com </string>
     <string name="distance_shoveled_label"> Distance Shoveled: </string>
-    <string name="distance_shoveled_text"> 3 miles </string>
     <string name="people_impacted_label"> People Impacted: </string>
-    <string name="people_impacted_text"> 12 </string>
-
-
 
 </resources>
