@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_cors import CORS
 import json
 import pyrebase
@@ -53,7 +53,7 @@ def update_request(request_id):
 
     return 'Succesfully updated request'
 
-@app.route('/upvote-request/<string:request_id>')
+@app.route('/upvote-request/<string:request_id>', methods=['PUT'])
 def upvote_request(request_id):
     '''
     Upvotes a request based on request_id
@@ -73,12 +73,25 @@ def add_comment(request_id):
     db = firebase.database()
     comments = db.child('requests').child(request_id).child('comments').get().val()
     if not comments:
-        data = { 0 : { 'comment' : body['comment'], 'name' : body['name'], 'user_id' : body['user_id'] } }
+        data = { 
+            0 : { 
+                'comment' : body['comment'], 
+                'name' : body['name'],
+                'user_id' : body['user_id'] 
+            } 
+        }
+
         db.child('requests').child(request_id).push({ 'comments' : data })
         return 'Successfully added comment'
 
     next_index = len(comments)
-    data = { next_index : { 'comment' : body['comment'], 'name' : body['name'], 'user_id' : body['user_id'] } }
+    data = { 
+        next_index : { 
+            'comment' : body['comment'], 
+            'name' : body['name'], 
+            'user_id' : body['user_id'] 
+        } 
+    }
     db.child('requests').child(request_id).child('comments').push(data)
     return 'Successfully added comment'
 
@@ -90,6 +103,55 @@ def get_user(user_id):
     db = firebase.database()
     user_data = db.child('users').child(user_id).get().val()
     return json.dumps(user_data)
+
+@app.route('/login', methods=['POST'])
+def login():
+    '''
+    Takes in JSON body with username and password parameters and attempts to log user in.
+    Creates a token that lasts an hour if user is logs in successfully.
+    If successful, return '0'. Otherwise, return '1'
+    '''
+    try:
+        body = request.json
+        auth = firebase.auth()
+        user = auth.sign_in_with_email_and_password(body['email'], body['password'])
+        db = firebase.database()
+        data = { 'email' : body['email'] }
+        results = db.child('users').push(data, user['idToken'])
+        return '0'
+    except:
+        print('Login failed!')
+        return Response('1', status=406)
+
+@app.route('/create-account', methods=['POST'])
+def create_account():
+    '''
+    Creates an account based on JSON body with email, password, first_name, last_name, and bio parameters.
+    Password is not saved in Realtime Database
+    WILL FAIL IF DUPLICATE EMAIL EXISTS
+    '''
+    try:
+        body = request.json
+        auth = firebase.auth()
+        auth.create_user_with_email_and_password(body['email'], body['password'])
+
+        data = { 
+            'email' : body['email'], 
+            'first_name' : body['firstName'], 
+            'last_name' : body['lastName'], 
+            'bio' : body['bio'],
+            'people_impacted' : 0,
+            'distance_shoveled' : 0
+        }
+        db = firebase.database()
+        # use email with periods replaced as commas because firebase does not allow periods in key
+        db.child('users').child(body['email'].replace('.', ',')).set(data) 
+
+        return '0'
+    except:
+        print('Create Account failed! Email is already used.')
+        return Response('1', status=406)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
