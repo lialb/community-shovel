@@ -3,6 +3,7 @@ from flask_cors import CORS
 import json
 import pyrebase
 import config
+from requests.exceptions import HTTPError
 
 '''
 HTTP Server API interfacing firebase for the Community Shovel App
@@ -119,8 +120,8 @@ def login():
         data = { 'email' : body['email'] }
         results = db.child('users').push(data, user['idToken'])
         return '0'
-    except:
-        print('Login failed!')
+    except HTTPError as e:
+        print(e)
         return Response('1', status=406)
 
 @app.route('/create-account', methods=['POST'])
@@ -134,7 +135,6 @@ def create_account():
         body = request.json
         auth = firebase.auth()
         auth.create_user_with_email_and_password(body['email'], body['password'])
-
         data = { 
             'email' : body['email'], 
             'first_name' : body['firstName'], 
@@ -148,8 +148,8 @@ def create_account():
         db.child('users').child(body['email'].replace('.', ',')).set(data) 
 
         return '0'
-    except:
-        print('Create Account failed! Email is already used.')
+    except HTTPError as e:
+        print(e)
         return Response('1', status=406)
 
 
