@@ -1,5 +1,6 @@
 package com.uxmen.communityshovel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SignUpPage extends AppCompatActivity implements View.OnClickListener {
-    private static String DEBUG = "DEBUG";
+    private static final String DEBUG = "DEBUG";
 
     private Button submitButton;
     private EditText emailEditText;
@@ -47,9 +48,11 @@ public class SignUpPage extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.submit_button) {
-            Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
-            boolean success = signUp();
-            // TODO: navigate back to log in screen
+            boolean success = signUp(v);
+            if (success) {
+                Intent intent = new Intent(this, SignInPage.class);
+                startActivity(intent);
+            }
         }
     }
 
@@ -58,7 +61,7 @@ public class SignUpPage extends AppCompatActivity implements View.OnClickListene
      * currently entered in the editText fields.
      * @return true if account creation is successful; false otherwise
      */
-    private boolean signUp() {
+    private boolean signUp(View v) {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String confirmPassword = confirmPasswordEditText.getText().toString();
@@ -104,10 +107,10 @@ public class SignUpPage extends AppCompatActivity implements View.OnClickListene
                         Log.d(DEBUG, response.toString());
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley Error", error.getMessage());
+                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        Toast.makeText(v.getContext(), "Invalid Email/Pass", Toast.LENGTH_SHORT).show();
                     }
                 });
 

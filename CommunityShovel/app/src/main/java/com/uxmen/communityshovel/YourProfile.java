@@ -26,6 +26,7 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
+    private User activeUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,9 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
             String s = new String(savedInstanceState.getString(KEY));
             Log.d(DEBUG, s);
         }
+
+        activeUser = getIntent().getParcelableExtra("active_user");
+        Log.d(DEBUG, "YourProfile: bio = " + activeUser.getBio());
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
@@ -67,58 +71,29 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    /**
+     * fillUserInfo populates the textViews on the Profile page with the user's data
+     */
     public void fillUserInfo() {
-        final TextView textViewFirstName = (TextView) findViewById(R.id.first_name_text);
-        final TextView textViewLastName = (TextView) findViewById(R.id.last_name_text);
-        final TextView textViewEmail = (TextView) findViewById(R.id.email_text);
-        final TextView textViewDistanceShoveled = (TextView) findViewById(R.id.distance_shoveled_text);
-        final TextView textViewPeopleImpacted = (TextView) findViewById(R.id.people_impacted_text);
+        TextView textViewFirstName = (TextView) findViewById(R.id.first_name_text);
+        TextView textViewLastName = (TextView) findViewById(R.id.last_name_text);
+        TextView textViewEmail = (TextView) findViewById(R.id.email_text);
+        TextView textViewDistanceShoveled = (TextView) findViewById(R.id.distance_shoveled_text);
+        TextView textViewPeopleImpacted = (TextView) findViewById(R.id.people_impacted_text);
+        TextView textViewBio = (TextView) findViewById(R.id.bio_text);
 
-        // Instantiate the RequestQueue.
-        String url ="http://10.0.2.2:5000/get-user/0";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String firstName = "";
-                        String lastName = "";
-                        String email = "";
-                        String distanceShoveled = "";
-                        String peopleImpacted = "";
-
-                        try {
-                            firstName = response.getString("first_name");
-                            lastName = response.getString("last_name");
-                            email = response.getString("email");
-                            distanceShoveled = response.getString("distance_shoveled");
-                            peopleImpacted = response.getString("people_impacted");
-                        } catch (JSONException e) {
-                              Log.e("JSON Exception", e.getMessage());
-                        }
-                        textViewFirstName.setText(firstName);
-                        textViewLastName.setText(lastName);
-                        textViewEmail.setText(email);
-                        textViewDistanceShoveled.setText(distanceShoveled);
-                        textViewPeopleImpacted.setText(peopleImpacted);
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        textViewFirstName.setText("That didn't work!");
-                        Log.e("Volly Error", error.toString());
-                    }
-                });
-
-        // Access the RequestQueue through your singleton class.
-        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-
+        textViewFirstName.setText(activeUser.getFirstName());
+        textViewLastName.setText(activeUser.getLastName());
+        textViewEmail.setText(activeUser.getEmail().replace(',','.'));
+        textViewDistanceShoveled.setText(activeUser.getDistanceShoveled()+"");
+        textViewPeopleImpacted.setText(activeUser.getPeopleImpacted()+"");
+        textViewBio.setText(activeUser.getBio());
     }
+
 
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
+        intent.putExtra("active_user", activeUser);
         startActivity(intent);
     }
 }

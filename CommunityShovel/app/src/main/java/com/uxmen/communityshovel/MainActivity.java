@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
     private static String DEBUG = "DEBUG";
     private static final String KEY = "KEY";
@@ -25,17 +26,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
+    private User activeUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(DEBUG, "onCreate()");
         setContentView(R.layout.activity_main);
-        
+
+
+
         if (savedInstanceState != null) {
             String s = new String(savedInstanceState.getString(KEY));
             Log.d(DEBUG, s);
         }
+
+        activeUser = getIntent().getParcelableExtra("active_user");
+        Log.d(DEBUG, "Main Activity: bio = " + activeUser.getBio());
         
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
             .findFragmentById(R.id.map);
@@ -96,18 +103,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View v) {
         if (v.getId() == R.id.home_button) {
-            Toast.makeText(this, "Going Home", Toast.LENGTH_SHORT).show();
             switchActivity(MainActivity.class);
         } else if (v.getId() == R.id.create_request_button) {
             Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.profile_button) {
-            Toast.makeText(this, "Viewing Profile", Toast.LENGTH_SHORT).show();
             switchActivity(YourProfile.class);
         }
     }
 
+    /**
+     * switchActivity will switch to the specified activity, bringing along the user info
+     * @param activity the class of the activity to switch to
+     */
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
+        intent.putExtra("active_user", activeUser);
         startActivity(intent);
     }
 }
