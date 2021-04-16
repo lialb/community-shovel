@@ -71,6 +71,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="@string/people_impacted_label"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/bio_label"/>
             </LinearLayout>
             // Actual information
             <LinearLayout
@@ -111,7 +116,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:textColor="#333"/>
-
+                <TextView
+                    android:id="@+id/bio_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:textColor="#333"/>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
