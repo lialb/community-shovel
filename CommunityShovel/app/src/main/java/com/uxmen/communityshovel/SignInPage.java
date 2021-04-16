@@ -77,7 +77,9 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
                     Log.d(DEBUG, response.toString());
                     lookupUserAndGo(email);
                 }, error -> {
-                    Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                    if(error.networkResponse != null) {
+                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                    }
                     Toast.makeText(v.getContext(), "Invalid Login", Toast.LENGTH_SHORT).show();
                 });
 

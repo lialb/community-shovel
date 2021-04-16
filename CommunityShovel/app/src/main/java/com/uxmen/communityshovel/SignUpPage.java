@@ -109,7 +109,9 @@ public class SignUpPage extends AppCompatActivity implements View.OnClickListene
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        if (error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
                         Toast.makeText(v.getContext(), "Invalid Email/Pass", Toast.LENGTH_SHORT).show();
                     }
                 });
