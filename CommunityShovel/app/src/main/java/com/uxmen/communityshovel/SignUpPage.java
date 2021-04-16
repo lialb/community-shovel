@@ -9,6 +9,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SignUpPage extends AppCompatActivity implements View.OnClickListener {
     private static String DEBUG = "DEBUG";
 
@@ -40,17 +48,72 @@ public class SignUpPage extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         if (v.getId() == R.id.submit_button) {
             Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
-            String email = emailEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-            String confirmPassword = confirmPasswordEditText.getText().toString();
-            String firstName = firstNameEditText.getText().toString();
-            String lastName = lastNameEditText.getText().toString();
-            String bio = bioEditText.getText().toString();
-            Log.d(DEBUG, "First Name: " + firstName + " Last Name: " + lastName);
-            Log.d(DEBUG, "Email: " + email + " Password: " + password + " Confirm Password: "
-                    + confirmPassword);
-            Log.d(DEBUG, "Bio: " + bio);
-            // TODO: Submit account creation request and navigate back to log in screen
+            boolean success = signUp();
+            // TODO: navigate back to log in screen
         }
     }
+
+    /**
+     * signUp sends a create-account request to the server based on what is
+     * currently entered in the editText fields.
+     * @return true if account creation is successful; false otherwise
+     */
+    private boolean signUp() {
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String confirmPassword = confirmPasswordEditText.getText().toString();
+        String firstName = firstNameEditText.getText().toString();
+        String lastName = lastNameEditText.getText().toString();
+        String bio = bioEditText.getText().toString();
+
+        Log.d(DEBUG, "First Name: " + firstName + " Last Name: " + lastName);
+        Log.d(DEBUG, "Email: " + email + " Password: " + password + " Confirm Password: "
+                + confirmPassword);
+        Log.d(DEBUG, "Bio: " + bio);
+
+        if (!password.equals(confirmPassword)) {
+            // passwords do not match, do not continue trying to create account
+            Toast.makeText(this, "Password Mismatch", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (password.length() < 6) {
+            Toast.makeText(this, "Password too short", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String url ="http://10.0.2.2:5000/create-account";
+
+        JSONObject request = new JSONObject();
+        try{
+            request.put("firstName", firstName);
+            request.put("lastName", lastName);
+            request.put("password", password);
+            request.put("email", email);
+            request.put("bio", bio);
+        }catch(JSONException e){
+            Log.e("JSONObject Error", e.getMessage());
+            return false;
+        }
+
+        Log.d(DEBUG, request.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(DEBUG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.getMessage());
+                    }
+                });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+        return true;
+    }
+
 }

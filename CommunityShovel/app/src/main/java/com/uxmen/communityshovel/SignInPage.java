@@ -12,6 +12,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SignInPage extends AppCompatActivity implements View.OnClickListener {
     private static String DEBUG = "DEBUG";
 
@@ -38,13 +46,51 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         if (v.getId() == R.id.signin_button) {
             Toast.makeText(this, "Sign In", Toast.LENGTH_SHORT).show();
-            String email = emailEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-            Log.d(DEBUG, "Email: " + email + " Password: " + password);
-            // TODO: hash password and send login request
+            boolean success = signIn();
         } else if (v.getId() == R.id.signup_button) {
             switchActivity(SignUpPage.class);
         }
+    }
+
+    /**
+     * signIn sends a login request to the server based on the email and password editTexts
+     * @return
+     */
+    private boolean signIn() {
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        Log.d(DEBUG, "Email: " + email + " Password: " + password);
+
+        String url ="http://10.0.2.2:5000/login";
+
+        JSONObject request = new JSONObject();
+        try{
+            request.put("email", email);
+            request.put("password", password);
+        }catch(JSONException e){
+            Log.e("JSONObject Error", e.getMessage());
+            return false;
+        }
+
+        Log.d(DEBUG, request.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                        Log.d(DEBUG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.getMessage());
+                    }
+                });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+        return true;
     }
 
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
