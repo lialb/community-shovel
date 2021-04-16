@@ -42,7 +42,7 @@ def create_request():
     db = firebase.database()
     db.child('requests').push(request.json)
 
-    return 'Successfully created request'
+    return json.dumps({'Success' : True})
 
 @app.route('/update-request/<string:request_id>', methods=['PUT'])
 def update_request(request_id):
@@ -52,7 +52,7 @@ def update_request(request_id):
     db = firebase.database()
     db.child('requests').child(request_id).update(request.json)
 
-    return 'Succesfully updated request'
+    return json.dumps({'Success' : True})
 
 @app.route('/upvote-request/<string:request_id>', methods=['PUT'])
 def upvote_request(request_id):
@@ -63,7 +63,7 @@ def upvote_request(request_id):
     current_upvotes = db.child('requests').child(request_id).child('upvotes').get().val()
     db.child('requests').child(request_id).update({ 'upvotes' : current_upvotes + 1 })
 
-    return 'Succesfully upvoted request'
+    return json.dumps({'Success' : True})
 
 @app.route('/add-comment/<string:request_id>', methods=['POST'])
 def add_comment(request_id):
@@ -83,7 +83,7 @@ def add_comment(request_id):
         }
 
         db.child('requests').child(request_id).push({ 'comments' : data })
-        return 'Successfully added comment'
+        return json.dumps({'Success' : True})
 
     next_index = len(comments)
     data = { 
@@ -94,7 +94,7 @@ def add_comment(request_id):
         } 
     }
     db.child('requests').child(request_id).child('comments').push(data)
-    return 'Successfully added comment'
+    return json.dumps({'Success' : True})
 
 @app.route('/get-user/<string:user_id>')
 def get_user(user_id):
@@ -119,7 +119,7 @@ def login():
         db = firebase.database()
         data = { 'email' : body['email'] }
         results = db.child('users').push(data, user['idToken'])
-        return '0'
+        return json.dumps({'Success' : True})
     except HTTPError as e:
         print(e)
         return Response('1', status=406)
@@ -147,7 +147,7 @@ def create_account():
         # use email with periods replaced as commas because firebase does not allow periods in key
         db.child('users').child(body['email'].replace('.', ',')).set(data) 
 
-        return '0'
+        return json.dumps({'Success' : True})
     except HTTPError as e:
         print(e)
         return Response('1', status=406)
