@@ -189,9 +189,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onMapClick(LatLng point) {
-        hideSelection();
-        if (this.curMarker != null) {
-            moveCameraToMarker(this.curMarker, 0.0);
+
+        if (this.selectionVisible && this.curMarker != null) {
+            int containerHeight = ((View) findViewById(R.id.map)).getHeight();
+            Point pointScreenPos = this.map.getProjection().toScreenLocation(point);
+            if (pointScreenPos.y < containerHeight / 2) {
+                hideSelection();
+            }
         }
     }
 
@@ -264,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             selectionView.startAnimation(slideDown);
             selectionView.setVisibility(View.INVISIBLE);
             this.selectionVisible = false;
+            moveCameraToMarker(this.curMarker, 0.0);
         }
     }
 
