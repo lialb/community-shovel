@@ -19,26 +19,14 @@
             android:layout_marginTop="30dp"
             android:textSize="25sp"
             android:textColor="#333"
-            android:text="@string/your_profile_text"/>
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:text="@string/edit_your_profile_text"/>
+
+        <Button
+            android:id="@+id/save_profile_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="top|center">
-            <Button
-                android:id="@+id/edit_profile_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/edit_profile_button_text" />
-            <Button
-                android:id="@+id/logout_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
-                android:text="@string/logout_button_text" />
-        </LinearLayout>
+            android:layout_marginTop="15dp"
+            android:text="@string/save_profile_button_text" />
 
         // Profile picture
         <ImageView
@@ -57,87 +45,68 @@
             android:paddingLeft="20dp"
             android:gravity="left">
 
-            // Information labels
             <LinearLayout
-                android:id="@+id/information_labels"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="10dp"
-                android:orientation="vertical"
-                android:gravity="right">
+                android:orientation="horizontal"
+                android:gravity="left">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="@string/first_name_label"/>
+                <EditText
+                    android:id="@+id/first_name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:textColor="#333"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:gravity="left">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:orientation="horizontal"
+                android:gravity="left">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="@string/last_name_label"/>
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/last_name_edit_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/email_label"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/distance_shoveled_label"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/people_impacted_label"/>
+                    android:textColor="#333"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:gravity="left">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:orientation="horizontal"
+                android:gravity="left">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="@string/bio_label"/>
-            </LinearLayout>
-            // Actual information
-            <LinearLayout
-                android:id="@+id/information_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/information_labels"
-                android:orientation="vertical"
-                android:gravity="left">
-
-                <TextView
-                    android:id="@+id/first_name_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333"/>
-                <TextView
-                    android:id="@+id/last_name_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333"/>
-                <TextView
-                    android:id="@+id/email_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333"/>
-                <TextView
-                    android:id="@+id/distance_shoveled_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333"/>
-                <TextView
-                    android:id="@+id/people_impacted_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333"/>
-                <TextView
-                    android:id="@+id/bio_text"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/bio_edit_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:textColor="#333"/>

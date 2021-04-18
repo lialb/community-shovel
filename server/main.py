@@ -116,11 +116,11 @@ def update_user(email):
     try:
         body = request.json
         data = {}
-        if 'firstName' in body:
-            data['first_name'] = body['firstName']
+        if 'first_name' in body:
+            data['first_name'] = body['first_name']
             
-        if 'lastName' in body:
-            data['last_name'] = body['lastName']
+        if 'last_name' in body:
+            data['last_name'] = body['last_name']
 
         if 'bio' in body:
             data['bio'] = body['bio']

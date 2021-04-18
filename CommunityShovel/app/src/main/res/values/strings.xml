@@ -12,6 +12,10 @@
     <string name="distance_shoveled_label"> Distance Shoveled: </string>
     <string name="people_impacted_label"> People Impacted: </string>
     <string name="bio_label"> Biography: </string>
+    <string name="edit_profile_button_text"> Edit </string>
+    <string name="edit_your_profile_text"> Editing Your Profile </string>
+    <string name="save_profile_button_text"> Save </string>
+    <string name="logout_button_text"> Logout </string>
 
     <string name="email_hint"> Email </string>
     <string name="password_hint"> Password </string>

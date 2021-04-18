@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
+    private Button editButton;
     private User activeUser;
 
     @Override
@@ -45,10 +47,14 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
+        editButton = (Button) findViewById(R.id.edit_profile_button);
+        Button logoutButton = (Button) findViewById(R.id.logout_button);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
+        editButton.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
 
         fillUserInfo();
     }
@@ -66,8 +72,13 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         } else if (v.getId() == R.id.create_request_button) {
             Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.profile_button) {
-            Toast.makeText(this, "Viewing Profile", Toast.LENGTH_SHORT).show();
             switchActivity(YourProfile.class);
+        } else if (v.getId() == R.id.edit_profile_button) {
+            switchActivity(EditYourProfile.class);
+        } else if (v.getId() == R.id.logout_button) {
+            // switch back to sign in screen without passing active user
+            Intent intent = new Intent(this, SignInPage.class);
+            startActivity(intent);
         }
     }
 
