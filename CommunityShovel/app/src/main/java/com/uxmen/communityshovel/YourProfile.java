@@ -48,11 +48,13 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
         editButton = (Button) findViewById(R.id.edit_profile_button);
+        Button logoutButton = (Button) findViewById(R.id.logout_button);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
 
         fillUserInfo();
     }
@@ -73,6 +75,10 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
             switchActivity(YourProfile.class);
         } else if (v.getId() == R.id.edit_profile_button) {
             switchActivity(EditYourProfile.class);
+        } else if (v.getId() == R.id.logout_button) {
+            // switch back to sign in screen without passing active user
+            Intent intent = new Intent(this, SignInPage.class);
+            startActivity(intent);
         }
     }
 

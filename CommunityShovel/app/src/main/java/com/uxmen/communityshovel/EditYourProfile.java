@@ -84,8 +84,6 @@ public class EditYourProfile extends AppCompatActivity implements View.OnClickLi
             Log.e("JSONObject Error", e.getMessage());
         }
 
-
-
         Log.d(DEBUG, request.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -100,8 +98,6 @@ public class EditYourProfile extends AppCompatActivity implements View.OnClickLi
                 });
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-
-        // TODO: save profile changes
     }
     // copied from sign in
     private void lookupUserAndGo(String email) {
