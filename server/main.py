@@ -96,14 +96,42 @@ def add_comment(request_id):
     db.child('requests').child(request_id).child('comments').push(data)
     return json.dumps({'Success' : True})
 
-@app.route('/get-user/<string:user_id>')
-def get_user(user_id):
+@app.route('/get-user/<string:email>')
+def get_user(email):
     '''
-    Gets user info based on user_id
+    Gets user info based on email. 
+    MAKE SURE TO REPLACE PERIODS WITH COMMAS IN EMAIL BEFORE CALLING THIS ROUTE
     '''
     db = firebase.database()
-    user_data = db.child('users').child(user_id).get().val()
+    user_data = db.child('users').child(email).get().val()
     return json.dumps(user_data)
+
+@app.route('/update-user/<string:email>', methods=['PUT'])
+def update_user(email):
+    '''
+    Updates a user's first name, last name, and/or bio. Accepts JSON body and email url parameter
+    MAKE SURE TO REPLACE PERIODS WITH COMMAS IN EMAIL BEFORE CALLING THIS ROUTE
+    '''
+    db = firebase.database()
+    try:
+        body = request.json
+        data = {}
+        if 'firstName' in body:
+            data['first_name'] = body['firstName']
+            
+        if 'lastName' in body:
+            data['last_name'] = body['lastName']
+
+        if 'bio' in body:
+            data['bio'] = body['bio']
+        
+        db.child('users').child(email).update(data)
+
+        return json.dumps({'Success' : True})
+    except:
+        print('Something went wrong')
+        return Response('1', status=406)
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -117,8 +145,8 @@ def login():
         auth = firebase.auth()
         user = auth.sign_in_with_email_and_password(body['email'], body['password'])
         db = firebase.database()
-        data = { 'email' : body['email'] }
-        results = db.child('users').push(data, user['idToken'])
+        # data = { 'email' : body['email'] }
+        # results = db.child('users').push(data, user['idToken'])
         return json.dumps({'Success' : True})
     except HTTPError as e:
         print(e)
@@ -129,7 +157,7 @@ def create_account():
     '''
     Creates an account based on JSON body with email, password, first_name, last_name, and bio parameters.
     Password is not saved in Realtime Database
-    WILL FAIL IF DUPLICATE EMAIL EXISTS
+    WILL FAIL IF DUPLICATE EMAIL EXISTS OR PASSWORD IS UNDER 6 CHARACTERS
     '''
     try:
         body = request.json
