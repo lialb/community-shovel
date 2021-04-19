@@ -322,8 +322,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
-            //TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
-            //upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
+            TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
+            upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
         }
     }
 
