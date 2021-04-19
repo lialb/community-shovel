@@ -112,5 +112,6 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         Intent intent = new Intent(this, activity);
         intent.putExtra("active_user", activeUser);
         startActivity(intent);
+        this.overridePendingTransition(0, 0);
     }
 }
