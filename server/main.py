@@ -4,6 +4,7 @@ import json
 import pyrebase
 import config
 from requests.exceptions import HTTPError
+import time
 
 '''
 HTTP Server API interfacing firebase for the Community Shovel App
@@ -43,6 +44,41 @@ def create_request():
     db.child('requests').push(request.json)
 
     return json.dumps({'Success' : True})
+
+@app.route('/volunteer-for-request/<string:request_id>', methods=['PUT'])
+def volunteer_for_request(request_id):
+    '''
+    Adds a user to volunteer for a request. Takes in email through JSON body
+    '''
+    try:
+        body = request.json
+        db = firebase.database()
+        if '.' in body['email']:
+            body['email'] = body['email'].replace('.', ',')
+        db.child('requests').child(request_id).child('volunteers').set({ body['email']: int(time.time()) })
+
+        return json.dumps({'Success' : True})
+    except:
+        print('Something went wrong.')
+        return Response('1', status=400)
+    
+@app.route('/remove-volunteer/<string:request_id>', methods=['PUT'])
+def remove_volunteer(request_id):
+    '''
+    Remove a volunteer from a request. Takes in email through JSON body
+    '''
+    try:
+        body = request.json
+        db = firebase.database()
+        if '.' in body['email']:
+            body['email'] = body['email'].replace('.', ',')
+        db.child('requests').child(request_id).child('volunteers').child(body['email']).remove()
+
+        return json.dumps({'Success' : True})
+    except:
+        print('Something went wrong.')
+        return Response('1', status=400)
+
 
 @app.route('/update-request/<string:request_id>', methods=['PUT'])
 def update_request(request_id):
@@ -102,6 +138,8 @@ def get_user(email):
     Gets user info based on email. 
     MAKE SURE TO REPLACE PERIODS WITH COMMAS IN EMAIL BEFORE CALLING THIS ROUTE
     '''
+    if '.' in email:
+        email = email.replace('.', ',')
     db = firebase.database()
     user_data = db.child('users').child(email).get().val()
     return json.dumps(user_data)
@@ -124,6 +162,8 @@ def update_user(email):
 
         if 'bio' in body:
             data['bio'] = body['bio']
+        if '.' in email:
+            email = email.replace('.', ',')
         
         db.child('users').child(email).update(data)
 
@@ -144,7 +184,7 @@ def login():
         body = request.json
         auth = firebase.auth()
         user = auth.sign_in_with_email_and_password(body['email'], body['password'])
-        db = firebase.database()
+        # db = firebase.database()
         # data = { 'email' : body['email'] }
         # results = db.child('users').push(data, user['idToken'])
         return json.dumps({'Success' : True})
