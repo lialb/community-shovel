@@ -41,7 +41,9 @@ def create_request():
     Creates a request through JSON body. Needs creator_id, info, time, x_coord, y_coord, and comments
     '''
     db = firebase.database()
-    db.child('requests').push(request.json)
+    body = request.json
+    body['status'] = 0
+    db.child('requests').push(body)
 
     return json.dumps({'Success' : True})
 
