@@ -321,9 +321,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d(DEBUG, "Volunteering for selection");
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
-            TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
-            upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
+            upvoteSelection();
+            //TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
+            //upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
         }
+    }
+
+    public void upvoteSelection() {
+        String url;
+        // find request based on the provided key
+        try {
+            url = "http://10.0.2.2:5000/upvote-request/" + this.curMarker.getTag();
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(DEBUG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
+                    }
+                });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
     /**
