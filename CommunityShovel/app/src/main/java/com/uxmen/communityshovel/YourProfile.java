@@ -28,6 +28,7 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
     private ImageButton createRequestButton;
     private ImageButton profileButton;
     private Button editButton;
+    private Button viewCommentsButton;
     private User activeUser;
 
     @Override
@@ -49,12 +50,14 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         profileButton = (ImageButton) findViewById(R.id.profile_button);
         editButton = (Button) findViewById(R.id.edit_profile_button);
         Button logoutButton = (Button) findViewById(R.id.logout_button);
+        viewCommentsButton = (Button) findViewById(R.id.your_profile_view_comments_button);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
+        viewCommentsButton.setOnClickListener(this);
 
         fillUserInfo();
     }
@@ -79,6 +82,9 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
             // switch back to sign in screen without passing active user
             Intent intent = new Intent(this, SignInPage.class);
             startActivity(intent);
+        } else if (v.getId() == R.id.your_profile_view_comments_button) {
+            Toast.makeText(this, "View Profile Comments", Toast.LENGTH_SHORT).show();
+            // TODO: switch to Hritik's View Comments activity
         }
     }
 

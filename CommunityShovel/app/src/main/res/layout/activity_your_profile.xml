@@ -143,7 +143,18 @@
                     android:textColor="#333"/>
             </LinearLayout>
         </RelativeLayout>
+    <Button
+        android:id="@+id/your_profile_view_comments_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:background="@android:color/transparent"
+        android:textColor="#04f"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:text="@string/profile_view_comments_label" />
     </LinearLayout>
+
 
     <!-- Nav Bar -->
     <RelativeLayout
