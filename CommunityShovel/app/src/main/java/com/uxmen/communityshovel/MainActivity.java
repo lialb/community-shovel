@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         activeUser = getIntent().getParcelableExtra("active_user");
         Log.d(DEBUG, "Main Activity: bio = " + activeUser.getBio());
-        
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
-            .findFragmentById(R.id.map);
+                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
