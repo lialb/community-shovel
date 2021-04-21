@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapClickListener, View.OnClickListener,
@@ -39,6 +42,8 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
     private Button cancelButton;
     private Button confirmButton;
     private TextView location;
+    private TextView info;
+    //private ArrayList<Request> requests = new ArrayList<Request>();
     private GoogleMap map;
     private Marker mapMarker;
     private User activeUser;
@@ -68,6 +73,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         confirmButton = (Button) findViewById(R.id.confirm_button);
 
         location = (TextView) findViewById(R.id.location_text);
+        info = (EditText) findViewById(R.id.info_text);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
@@ -102,6 +108,11 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
 
     }
 
+    public Request newRequest(LatLng point) {
+        return new Request(activeUser.getFirstName(), info.getText().toString(),
+                new ArrayList<String>(), new ArrayList<String>(), 0, 0, point.longitude, point.latitude);
+    }
+
     public void onClick(View v) {
         if (v.getId() == R.id.home_button || v.getId() == R.id.cancel_button) {
             switchActivity(MainActivity.class);
@@ -110,7 +121,9 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         } else if (v.getId() == R.id.create_request_button) {
             Toast.makeText(this, "Already Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.confirm_button) {
-            //switchActivity(Request.class);
+            Request r = newRequest(mapMarker.getPosition());
+            //requests.add(r);
+            switchActivity(MainActivity.class);
         }
     }
 
