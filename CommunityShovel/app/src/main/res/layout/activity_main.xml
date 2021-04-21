@@ -6,14 +6,167 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <!-- Map -->
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
+    <!-- Map and overlay -->
+    <FrameLayout
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="88"/>
+        android:layout_weight="88">
+        <!-- Map -->
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!-- Selection Overlay -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- invisible spacer -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"/>
+            <!-- toggleable overlay -->
+            <LinearLayout
+                android:id="@+id/selection"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="50"
+                android:background="@drawable/layout_bg"
+                android:weightSum="100"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/selection_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="80"
+                    android:orientation="vertical">
+                    <!-- Location -->
+                    <LinearLayout
+                        android:id="@+id/selection_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="Location"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/selection_location_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+                    <!-- Upvotes -->
+                    <LinearLayout
+                        android:id="@+id/selection_upvotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:paddingRight="10dp"
+                            android:text="@string/upvotes_label"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/selection_upvotes_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+                        <ImageButton
+                            android:id="@+id/selection_upvote_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="20dp"
+                            android:src="@drawable/ic_upvote"
+                            android:contentDescription="@string/desc"
+                            android:background="@android:color/transparent"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerInside"/>
+
+                    </LinearLayout>
+                    <!-- Info -->
+                    <LinearLayout
+                        android:id="@+id/selection_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="@string/info_label"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/selection_info_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/selection_view_comments_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:background="@android:color/transparent"
+                        android:textColor="#04f"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        android:text="@string/view_comments_label" />
+
+                </LinearLayout>
+                <Button
+                    android:id="@+id/selection_volunteer_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/selection_details"
+                    android:layout_weight="20"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="26sp"
+                    android:text="Volunteer"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 
     <!-- Nav Bar -->
     <RelativeLayout
