@@ -151,13 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             Log.d(DEBUG, e.getMessage());
                                         }
 
-                                        Log.d(DEBUG, "VVVVV This is what a key for a request looks like VVVVV");
-                                        Log.d(DEBUG, key);
-
                                         String req_id = key;
-
-                                        Log.d(DEBUG, "Value is");
-                                        Log.d(DEBUG, req_id);
 
                                         int time = request.getInt("time");
                                         int upvotes = request.getInt("upvotes");
@@ -165,9 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         double yCoord = request.getDouble("y_coord");
                                         Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord, req_id);
                                         requests.add(r);
-
-                                        Log.d(DEBUG, "VVVV Checking r.getRequestID() VVVVV");
-                                        Log.d(DEBUG, String.valueOf(r.getRequestID()));
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
                                         Log.d(DEBUG, loc.toString());
@@ -336,8 +327,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void stopVolunteer() {
 
         new AlertDialog.Builder(this)
-                .setTitle("Title")
-                .setMessage("Do you really want to whatever?")
+                .setTitle("Please Confirm")
+                .setMessage("Do you really want to stop volunteering?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
@@ -355,8 +346,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void partialVolunteer() {
         new AlertDialog.Builder(this)
-                .setTitle("Title")
-                .setMessage("Do you really want to whatever?")
+                .setTitle("Please Confirm")
+                .setMessage("Do you really want to stop volunteering and mark partially complete?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
@@ -373,8 +364,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void completedVolunteer() {
         new AlertDialog.Builder(this)
-                .setTitle("Title")
-                .setMessage("Do you really want to whatever?")
+                .setTitle("Please Confirm")
+                .setMessage("Is the volunteer job completed?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
@@ -399,8 +390,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("Error", e.getMessage());
             return;
         }
-        Log.d(DEBUG, "VVVVV Printing out request.getinfo VVVVVV");
-        Log.d(DEBUG, request.getInfo());
 
         String url;
         // find request based on the provided key
@@ -417,14 +406,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.d(DEBUG, "Attempting to update request with ID:");
-        Log.d(DEBUG, request.getRequestID());
-        Log.d(DEBUG, "Using url");
-        Log.d(DEBUG, url);
-
-        Log.d(DEBUG, "VVVV This is JSON OBJECT VVVVV");
-        Log.d(DEBUG, body.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (com.android.volley.Request.Method.PUT, url, body, new Response.Listener<JSONObject>() {
