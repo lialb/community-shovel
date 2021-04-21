@@ -88,6 +88,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
     }
 
     public void onMapReady(GoogleMap map) {
+        // TODO: show all other requests while you are creating, in case you forgot which existed
         this.map = map;
         final LatLng curLocation = new LatLng(40.1164, -88.2434);
         mapMarker = map.addMarker(new MarkerOptions()
@@ -117,7 +118,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
 //        Request r = new Request(activeUser.getFirstName(), info.getText().toString(),
 //                new ArrayList<String>(), new ArrayList<String>(), 0, 0, point.longitude, point.latitude);
 
-        String url ="http://10.0.2.2:5000/create-request/";
+        String url ="http://10.0.2.2:5000/create-request";
 
 //      Creates a request through JSON body. Needs creator_id, info, time, x_coord, y_coord, and comments
         JSONObject request = new JSONObject();
@@ -125,8 +126,9 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
             request.put("creator_id", activeUser.getEmail());
             request.put("info", info.getText().toString());
             request.put("time", 0);
-            request.put("x_coord", point.longitude);
-            request.put("y_coord", point.latitude);
+            request.put("x_coord", point.latitude);
+            request.put("y_coord", point.longitude);
+            request.put("upvotes", 0);
 //            request.put("comments", "0");
             // empty comments?
         }catch(JSONException e){
