@@ -1,11 +1,15 @@
 package com.uxmen.communityshovel;
 
+/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 import androidx.appcompat.app.AlertDialog;
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 import android.content.DialogInterface;
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Address;
@@ -59,7 +63,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Request> requests = new ArrayList<Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
+    /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
     private Boolean volunteerVisible = false;
+    /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
     private Marker curMarker = null;
 
     @Override
@@ -150,14 +156,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         } catch (JSONException e) {
                                             Log.d(DEBUG, e.getMessage());
                                         }
-
+                                        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
                                         String req_id = key;
-
+                                        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
                                         int time = request.getInt("time");
                                         int upvotes = request.getInt("upvotes");
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
+                                        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
                                         Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord, req_id);
+                                        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
                                         requests.add(r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
@@ -279,10 +287,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             moveCameraToMarker(this.curMarker, 0.0);
         }
     }
-    //--------------------------------------------------------------------------------------------------------------------------------------------//
+    /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 
     public void showVolunteer() {
-        // populate selection overlay with request details
+        // populate volunteer overlay with request details
         TextView textViewVolunteerLocation = (TextView) findViewById(R.id.volunteer_location_text);
         TextView textViewVolunteerInfo = (TextView) findViewById(R.id.volunteer_info_text);
         TextView textViewSelectionLocation = (TextView) findViewById(R.id.selection_location_text);
@@ -299,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewVolunteerLocation.setText(location_text);
         textViewVolunteerInfo.setText(info_text);
 
-        // make selection overlay visible
+        // make volunteer overlay visible
         if (!this.volunteerVisible) {
             Animation slideUp = AnimationUtils.loadAnimation(this,
                     R.anim.slide_up);
@@ -308,8 +316,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             selectionView.setVisibility(View.VISIBLE);
             this.volunteerVisible = true;
         }
-
-        // add onClick listener for empty space?
     }
 
     public void hideVolunteer() {
@@ -427,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------------//
+    /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
     protected void onSaveInstanceState(Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -482,7 +488,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             upvoteSelection();
             //TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
             //upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
-        } else if (this.volunteerVisible && v.getId() == R.id.stop_volunteer_button) {
+        }
+        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
+        else if (this.volunteerVisible && v.getId() == R.id.stop_volunteer_button) {
             stopVolunteer();
             Log.d(DEBUG, "Stopping volunteer");
         } else if (this.volunteerVisible && v.getId() == R.id.partial_volunteer_button) {
@@ -492,6 +500,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             completedVolunteer();
             Log.d(DEBUG, "Completed volunteering");
         }
+        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
     }
 
     public void upvoteSelection() {

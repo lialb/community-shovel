@@ -15,8 +15,10 @@ public class Request implements Parcelable {
     private double xCoord;
     private double yCoord;
 
+    //Added this VVVVV
     private String request_id;
 
+    //Updated to include request_id
     public Request(String creatorId, String info, ArrayList<String> volunteers, ArrayList<String> comments, int time, int upvotes, double xCoord, double yCoord, String request_id) {
         this.creatorId = creatorId;
         this.info = info;
@@ -29,6 +31,7 @@ public class Request implements Parcelable {
         this.request_id = request_id;
     }
 
+    //Updated to include request_id
     public Request(Parcel source) {
         this.creatorId = source.readString();
         this.info = source.readString();
@@ -46,6 +49,7 @@ public class Request implements Parcelable {
         return 0;
     }
 
+    //Updated to include request_id
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.creatorId);
@@ -96,5 +100,7 @@ public class Request implements Parcelable {
     public double getYCoord() { return this.yCoord; }
     public void setYCoord(double yCoord) { this.yCoord = yCoord; }
 
+
+    //Added this
     public String getRequestID() { return this.request_id; }
 }
