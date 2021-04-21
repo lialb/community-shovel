@@ -10,106 +10,125 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <!-- Map -->
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="88" />
-
-    <!-- Nav Bar -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:gravity="start">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:orientation="horizontal"
-            android:gravity="left">
-
-            <TextView
-                android:id="@+id/location_label"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:text="@string/location_text" />
-
-
-            <EditText
-                android:id="@+id/location_text"
-                android:background="@android:color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="88"
-                android:textColor="#ccc"
-                android:gravity="center|center_vertical"
-                android:text="@string/location_default_label"
-                android:paddingBottom="20dp" />
-        </LinearLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:gravity="left">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:orientation="horizontal"
-            android:gravity="left">
-
-            <TextView
-                android:id="@+id/info_label"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:text="@string/info_text" />
-
-
-            <EditText
-                android:id="@+id/info_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="88"
-                android:gravity="center_vertical"
-                android:hint="@string/enter_text"
-                android:paddingBottom="20dp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-
+    <!-- Map and Info -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="12"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="88"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel_text" />
-<!--            android:layout_weight="1"-->
+        <!-- Map -->
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="65" />
+        <!-- Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="35"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:text="@string/confirm_text" />
-<!--            android:layout_weight="1"-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:gravity="start">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="left">
+
+                    <TextView
+                        android:id="@+id/location_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/location_text" />
+
+
+                    <EditText
+                        android:id="@+id/location_text"
+                        android:background="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="88"
+                        android:textColor="#ccc"
+                        android:gravity="center|center_vertical"
+                        android:text="@string/location_default_label"
+                        android:paddingBottom="20dp" />
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:gravity="left">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="left">
+
+                    <TextView
+                        android:id="@+id/info_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/info_text" />
+
+
+                    <EditText
+                        android:id="@+id/info_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="88"
+                        android:gravity="center_vertical"
+                        android:hint="@string/enter_text"
+                        android:paddingBottom="20dp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="12"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel_text" />
+                <!--            android:layout_weight="1"-->
+
+                <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="@string/confirm_text" />
+                <!--            android:layout_weight="1"-->
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
+
+
+
+    <!-- Nav Bar -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
