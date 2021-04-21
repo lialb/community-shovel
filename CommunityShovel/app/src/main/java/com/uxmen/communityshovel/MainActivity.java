@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             upvoteSelection();
             TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
             upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
-            Request curRequest = requests.get(Integer.parseInt((String)this.curMarker.getTag()));
+            Request curRequest = requests.get((String)this.curMarker.getTag());
             curRequest.setUpvotes(curRequest.getUpvotes() + 1);
         }
     }
