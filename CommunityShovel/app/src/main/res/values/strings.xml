@@ -38,5 +38,6 @@
     <string name="cancel_text"> Cancel </string>
     <string name="location_text"> Location: </string>
     <string name="info_text"> Info: </string>
-    <string name="enter_text"> Enter Info Here </string>
+    <string name="enter_text"> Enter Request Info Here </string>
+    <string name="location_default_label"> Tap location on map </string>
 </resources>

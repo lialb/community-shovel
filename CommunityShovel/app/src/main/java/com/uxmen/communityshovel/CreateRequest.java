@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +25,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,8 +45,8 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
     private ImageButton profileButton;
     private Button cancelButton;
     private Button confirmButton;
-    private TextView location;
-    private TextView info;
+    private EditText location;
+    private EditText info;
     //private ArrayList<Request> requests = new ArrayList<Request>();
     private GoogleMap map;
     private Marker mapMarker;
@@ -60,7 +64,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         }
 
         activeUser = getIntent().getParcelableExtra("active_user");
-        Log.d(DEBUG, "CreateRequest Activity: bio = " + activeUser.getBio());
+        Log.d(DEBUG, "CreateRequest Activity: email = " + activeUser.getEmail());
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -72,7 +76,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         cancelButton = (Button) findViewById(R.id.cancel_button);
         confirmButton = (Button) findViewById(R.id.confirm_button);
 
-        location = (TextView) findViewById(R.id.location_text);
+        location = (EditText) findViewById(R.id.location_text);
         info = (EditText) findViewById(R.id.info_text);
 
         homeButton.setOnClickListener(this);
@@ -108,9 +112,42 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
 
     }
 
-    public Request newRequest(LatLng point) {
-        return new Request(activeUser.getFirstName(), info.getText().toString(),
-                new ArrayList<String>(), new ArrayList<String>(), 0, 0, point.longitude, point.latitude);
+    // This method was changed to push the new request and return to the MainActivity map
+    public void newRequest(LatLng point, View v) {
+//        Request r = new Request(activeUser.getFirstName(), info.getText().toString(),
+//                new ArrayList<String>(), new ArrayList<String>(), 0, 0, point.longitude, point.latitude);
+
+        String url ="http://10.0.2.2:5000/create-request/";
+
+//      Creates a request through JSON body. Needs creator_id, info, time, x_coord, y_coord, and comments
+        JSONObject request = new JSONObject();
+        try{
+            request.put("creator_id", activeUser.getEmail());
+            request.put("info", info.getText().toString());
+            request.put("time", 0);
+            request.put("x_coord", point.longitude);
+            request.put("y_coord", point.latitude);
+//            request.put("comments", "0");
+            // empty comments?
+        }catch(JSONException e){
+            Log.e("JSONObject Error", e.getMessage());
+        }
+
+        Log.d(DEBUG, request.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.POST, url, request, response -> {
+                    Log.d(DEBUG, response.toString());
+                    // TODO: focus map on newly created request
+                    switchActivity(MainActivity.class);
+                }, error -> {
+                    if(error.networkResponse != null) {
+                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                    }
+                    Toast.makeText(v.getContext(), "Error Creating Request", Toast.LENGTH_SHORT).show();
+                });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
     public void onClick(View v) {
@@ -121,8 +158,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         } else if (v.getId() == R.id.create_request_button) {
             Toast.makeText(this, "Already Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.confirm_button) {
-            Request r = newRequest(mapMarker.getPosition());
-            //requests.add(r);
+            newRequest(mapMarker.getPosition(), v);
             switchActivity(MainActivity.class);
         }
     }
@@ -135,7 +171,7 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
                 .title("Marker")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(point, 14));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 14));
 
         Geocoder geo = new Geocoder(this);
         try {

@@ -20,91 +20,93 @@
         android:layout_weight="88" />
 
     <!-- Nav Bar -->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="14">
+        android:paddingLeft="20dp"
+        android:gravity="start">
 
         <LinearLayout
-            android:id="@+id/map_labels"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="30dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:orientation="horizontal"
+            android:gravity="left">
 
             <TextView
                 android:id="@+id/location_label"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:text="@string/location_text" />
 
+
+            <EditText
+                android:id="@+id/location_text"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="88"
+                android:textColor="#ccc"
+                android:gravity="center|center_vertical"
+                android:text="@string/location_default_label"
+                android:paddingBottom="20dp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:gravity="left">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:orientation="horizontal"
+            android:gravity="left">
+
             <TextView
                 android:id="@+id/info_label"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:text="@string/info_text" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/map_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/map_labels"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingTop="30dp"
-            android:paddingRight="20dp">
 
-            <TextView
-                android:id="@+id/location_text"
+            <EditText
+                android:id="@+id/info_text"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="88"
                 android:gravity="center_vertical"
+                android:hint="@string/enter_text"
                 android:paddingBottom="20dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/info_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/enter_text" />
-            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
     </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="12"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/cancel_text" />
+<!--            android:layout_weight="1"-->
 
         <Button
             android:id="@+id/confirm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="100dp"
             android:text="@string/confirm_text" />
+<!--            android:layout_weight="1"-->
 
     </LinearLayout>
 
