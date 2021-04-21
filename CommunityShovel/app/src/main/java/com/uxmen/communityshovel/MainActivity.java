@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button volunteerButton;
     private ImageButton upvoteButton;
     private User activeUser;
-    private ArrayList<Request> requests = new ArrayList<Request>();
+    private HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
     private Marker curMarker = null;
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
                                         Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
-                                        requests.add(r);
+                                        requests.put(key, r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
                                         Log.d(DEBUG, loc.toString());
@@ -223,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Request request;
         // find request based on the provided key
         try {
-            request = requests.get(Integer.parseInt((String)marker.getTag()));
+            request = requests.get((String)marker.getTag());
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             return;
@@ -320,7 +321,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switchActivity(YourProfile.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_comments_button) {
             Log.d(DEBUG, "Viewing comments for selection");
-            switchActivity(CommentsPage.class);
+            Intent intent = new Intent(getBaseContext(), CommentsPage.class);
+            Request r = requests.get((String)this.curMarker.getTag());
+            intent.putExtra("cur_request", r);
+            intent.putExtra("active_user", activeUser);
+            startActivity(intent);
+            //switchActivity(CommentsPage.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
             Log.d(DEBUG, "Volunteering for selection");
             confirmVolunteer();

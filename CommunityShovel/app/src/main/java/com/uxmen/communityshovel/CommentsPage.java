@@ -29,7 +29,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private ImageButton createRequestButton;
     private ImageButton profileButton;
     private User activeUser;
-
+    private com.uxmen.communityshovel.Request curRequest;
     private EditText addComment;
 
     @Override
@@ -40,6 +40,9 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
         activeUser = getIntent().getParcelableExtra("active_user");
         Log.d(DEBUG, "YourProfile: bio = " + activeUser.getBio());
+
+        curRequest = getIntent().getParcelableExtra("cur_request");
+        Log.d(DEBUG, "current requestId:" + curRequest.getRequestId());
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
