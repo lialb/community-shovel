@@ -1,9 +1,11 @@
 package com.uxmen.communityshovel;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Address;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Request> requests = new ArrayList<Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
+    private Boolean volunteerVisible = false;
     private Marker curMarker = null;
 
     @Override
@@ -93,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // hide selection initially
         findViewById(R.id.selection).setVisibility(View.INVISIBLE);
+
+        // hide volunteer initially
+        findViewById(R.id.volunteer).setVisibility(View.INVISIBLE);
     }
 
     public void onMapReady(GoogleMap map) {
@@ -145,12 +151,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             Log.d(DEBUG, e.getMessage());
                                         }
 
+                                        Log.d(DEBUG, "VVVVV This is what a key for a request looks like VVVVV");
+                                        Log.d(DEBUG, key);
+
+                                        String req_id = key;
+
+                                        Log.d(DEBUG, "Value is");
+                                        Log.d(DEBUG, req_id);
+
                                         int time = request.getInt("time");
                                         int upvotes = request.getInt("upvotes");
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
-                                        Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
+                                        Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord, req_id);
                                         requests.add(r);
+
+                                        Log.d(DEBUG, "VVVV Checking r.getRequestID() VVVVV");
+                                        Log.d(DEBUG, String.valueOf(r.getRequestID()));
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
                                         Log.d(DEBUG, loc.toString());
@@ -271,6 +288,165 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             moveCameraToMarker(this.curMarker, 0.0);
         }
     }
+    //--------------------------------------------------------------------------------------------------------------------------------------------//
+
+    public void showVolunteer() {
+        // populate selection overlay with request details
+        TextView textViewVolunteerLocation = (TextView) findViewById(R.id.volunteer_location_text);
+        TextView textViewVolunteerInfo = (TextView) findViewById(R.id.volunteer_info_text);
+        TextView textViewSelectionLocation = (TextView) findViewById(R.id.selection_location_text);
+        TextView textViewSelectionInfo = (TextView) findViewById(R.id.selection_info_text);
+
+        /*
+        TextView textview= ((TextView) findViewById(R.id.youtextviewid));
+        String yourtext= textview.getText().toString();
+         */
+
+        String info_text= textViewSelectionInfo.getText().toString();
+        String location_text= textViewSelectionLocation.getText().toString();
+
+        textViewVolunteerLocation.setText(location_text);
+        textViewVolunteerInfo.setText(info_text);
+
+        // make selection overlay visible
+        if (!this.volunteerVisible) {
+            Animation slideUp = AnimationUtils.loadAnimation(this,
+                    R.anim.slide_up);
+            View selectionView = findViewById(R.id.volunteer);
+            selectionView.startAnimation(slideUp);
+            selectionView.setVisibility(View.VISIBLE);
+            this.volunteerVisible = true;
+        }
+
+        // add onClick listener for empty space?
+    }
+
+    public void hideVolunteer() {
+        if (this.volunteerVisible) {
+            Animation slideDown = AnimationUtils.loadAnimation(this,
+                    R.anim.slide_down);
+            View volunteerView = findViewById(R.id.volunteer);
+            volunteerView.startAnimation(slideDown);
+            volunteerView.setVisibility(View.INVISIBLE);
+            this.volunteerVisible = false;
+            moveCameraToMarker(this.curMarker, 0.0);
+        }
+    }
+
+    public void stopVolunteer() {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Title")
+                .setMessage("Do you really want to whatever?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        updateReqStatus(0);
+                        hideVolunteer();
+                    }})
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+
+    }
+
+    public void partialVolunteer() {
+        new AlertDialog.Builder(this)
+                .setTitle("Title")
+                .setMessage("Do you really want to whatever?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        updateReqStatus(1);
+                        hideVolunteer();
+                    }})
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
+    public void completedVolunteer() {
+        new AlertDialog.Builder(this)
+                .setTitle("Title")
+                .setMessage("Do you really want to whatever?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        updateReqStatus(2);
+                        hideVolunteer();
+                    }})
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
+    //Update the status of curMarker
+    public void updateReqStatus(int status) {
+        Request request;
+        // find request based on the provided key
+        try {
+            request = requests.get(Integer.parseInt((String)this.curMarker.getTag()));
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            return;
+        }
+        Log.d(DEBUG, "VVVVV Printing out request.getinfo VVVVVV");
+        Log.d(DEBUG, request.getInfo());
+
+        String url;
+        // find request based on the provided key
+        try {
+            url = "http://10.0.2.2:5000/update-request/" + request.getRequestID();
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            return;
+        }
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("status", status);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(DEBUG, "Attempting to update request with ID:");
+        Log.d(DEBUG, request.getRequestID());
+        Log.d(DEBUG, "Using url");
+        Log.d(DEBUG, url);
+
+        Log.d(DEBUG, "VVVV This is JSON OBJECT VVVVV");
+        Log.d(DEBUG, body.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.PUT, url, body, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(DEBUG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
+                    }
+                });
+
+
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------//
 
     protected void onSaveInstanceState(Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -318,12 +494,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_comments_button) {
             Log.d(DEBUG, "Viewing comments for selection");
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
+            showVolunteer();
             Log.d(DEBUG, "Volunteering for selection");
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
             //TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
             //upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
+        } else if (this.volunteerVisible && v.getId() == R.id.stop_volunteer_button) {
+            stopVolunteer();
+            Log.d(DEBUG, "Stopping volunteer");
+        } else if (this.volunteerVisible && v.getId() == R.id.partial_volunteer_button) {
+            partialVolunteer();
+            Log.d(DEBUG, "Partially completed volunteering");
+        } else if (this.volunteerVisible && v.getId() == R.id.complete_volunteer_button) {
+            completedVolunteer();
+            Log.d(DEBUG, "Completed volunteering");
         }
     }
 

@@ -43,7 +43,7 @@
                     android:id="@+id/selection_details"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="80"
+                    android:layout_weight="90"
                     android:orientation="vertical">
                     <!-- Location -->
                     <LinearLayout
@@ -166,6 +166,152 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- invisible spacer -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="35"/>
+            <!-- toggleable overlay -->
+            <LinearLayout
+                android:id="@+id/volunteer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="62"
+                android:background="@drawable/layout_bg"
+                android:weightSum="100"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/volunteer_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="40"
+                    android:orientation="vertical">
+                    <!-- Location -->
+                    <LinearLayout
+                        android:id="@+id/volunteer_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="Location"
+                            android:textColor="#000"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/volunteer_location_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+                    <!-- Upvotes -->
+
+                    <!-- Info -->
+                    <LinearLayout
+                        android:id="@+id/volunteer_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="@string/info_label"
+                            android:textColor="#000"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/volunteer_info_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/volunteer_view_comments_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:paddingLeft="20dp"
+                        android:text="@string/view_comments_label"
+                        android:textAllCaps="false"
+                        android:textColor="#04f"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/stop_volunteer_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/selection_details"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="22"
+                    android:onClick="onClick"
+                    android:text="Stop Volunteering"
+                    android:textAllCaps="false"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/partial_volunteer_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/selection_details"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="22"
+                    android:onClick="onClick"
+                    android:text="Mark Partially Complete"
+                    android:textAllCaps="false"
+                    android:textSize="26sp" />
+
+                <Button
+                    android:id="@+id/complete_volunteer_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/selection_details"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="22"
+                    android:onClick="onClick"
+                    android:text="Mark Completed"
+                    android:textAllCaps="false"
+                    android:textSize="26sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
     </FrameLayout>
 
     <!-- Nav Bar -->
