@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class Request implements Parcelable {
+    private String requestId;
     private String creatorId;
     private String info;
     private ArrayList<String> volunteers;
@@ -15,7 +16,8 @@ public class Request implements Parcelable {
     private double xCoord;
     private double yCoord;
 
-    public Request(String creatorId, String info, ArrayList<String> volunteers, ArrayList<String> comments, int time, int upvotes, double xCoord, double yCoord) {
+    public Request(String requestId, String creatorId, String info, ArrayList<String> volunteers, ArrayList<String> comments, int time, int upvotes, double xCoord, double yCoord) {
+        this.requestId = requestId;
         this.creatorId = creatorId;
         this.info = info;
         this.volunteers = volunteers;
@@ -27,6 +29,7 @@ public class Request implements Parcelable {
     }
 
     public Request(Parcel source) {
+        this.requestId = source.readString();
         this.creatorId = source.readString();
         this.info = source.readString();
         this.volunteers = source.createStringArrayList();
@@ -44,6 +47,7 @@ public class Request implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.requestId);
         dest.writeString(this.creatorId);
         dest.writeString(this.info);
         dest.writeStringList(this.volunteers);
@@ -66,6 +70,9 @@ public class Request implements Parcelable {
             return new Request[size];
         }
     };
+
+    public String getRequestId() { return this.requestId; }
+    public void setRequestId(String requestId) { this.requestId = requestId; }
 
     public String getCreatorId() { return this.creatorId; }
     public void setCreatorId(String creatorId) { this.creatorId = creatorId; }
