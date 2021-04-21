@@ -120,19 +120,17 @@ def add_request_comment(request_id):
             } 
         }
 
-        db.child('requests').child(request_id).push({ 'comments' : data })
+        db.child('requests').child(request_id).child('comments').set(data)
         return json.dumps({'Success' : True})
-
     next_index = len(comments)
     data = { 
-        next_index : { 
-            'comment' : body['comment'], 
-            'name' : body['name'], 
-            'user_id' : body['user_id'] 
-        } 
+        'comment' : body['comment'], 
+        'name' : body['name'], 
+        'user_id' : body['user_id'] 
     }
-    db.child('requests').child(request_id).child('comments').push(data)
+    db.child('requests').child(request_id).child('comments').child(next_index).set(data)
     return json.dumps({'Success' : True})
+
 
 @app.route('/get-user/<string:email>')
 def get_user(email):
@@ -179,9 +177,6 @@ def add_user_comment(email):
     '''
     Adds comment to user profile with email. Takes in JSON body with user_id, name, and comment parameters.
     '''
-    if '.' in email:
-        email = email.replace('.', ',')
-
     body = request.json
     db = firebase.database()
     comments = db.child('users').child(email).child('comments').get().val()
@@ -194,18 +189,15 @@ def add_user_comment(email):
             } 
         }
 
-        db.child('users').child(email).push({ 'comments' : data })
+        db.child('users').child(email).child('comments').set(data)
         return json.dumps({'Success' : True})
-
     next_index = len(comments)
     data = { 
-        next_index : { 
-            'comment' : body['comment'], 
-            'name' : body['name'], 
-            'user_id' : body['user_id'] 
-        } 
+        'comment' : body['comment'], 
+        'name' : body['name'], 
+        'user_id' : body['user_id'] 
     }
-    db.child('users').child(email).child('comments').push(data)
+    db.child('users').child(email).child('comments').child(next_index).set(data)
     return json.dumps({'Success' : True})
 
 
