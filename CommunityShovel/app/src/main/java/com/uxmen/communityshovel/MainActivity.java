@@ -320,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switchActivity(YourProfile.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_comments_button) {
             Log.d(DEBUG, "Viewing comments for selection");
+            switchActivity(CommentsPage.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
             Log.d(DEBUG, "Volunteering for selection");
             confirmVolunteer();
