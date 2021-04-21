@@ -23,13 +23,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="80">
+        android:layout_weight="14">
 
         <LinearLayout
             android:id="@+id/map_labels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right|center_vertical"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingTop="30dp"
@@ -38,13 +38,15 @@
             <TextView
                 android:id="@+id/location_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
                 android:text="@string/location_text" />
 
             <TextView
                 android:id="@+id/info_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
                 android:text="@string/info_text" />
         </LinearLayout>
 
@@ -53,23 +55,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/map_labels"
-            android:gravity="left|center_vertical"
+            android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="30dp">
+            android:paddingLeft="10dp"
+            android:paddingTop="30dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:id="@+id/location_text"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="88" />
+                android:layout_weight="88"
+                android:gravity="center_vertical"
+                android:paddingBottom="20dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="40dp"
+                android:gravity="center_vertical">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:hint="@string/enter_text" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -79,7 +87,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="20"
+        android:layout_weight="12"
         android:orientation="horizontal">
 
         <Button

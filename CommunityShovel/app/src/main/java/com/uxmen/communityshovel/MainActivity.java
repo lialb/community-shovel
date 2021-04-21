@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     marker.getPosition().longitude, 1);
             selectionLocation = markerAddress.get(0).getAddressLine(0);
         } catch (IOException e) {
-
+            Log.d(DEBUG, "Could not find address");
         }
 
         textViewSelectionLocation.setText(selectionLocation);
