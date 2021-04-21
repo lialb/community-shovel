@@ -175,7 +175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        if (error != null && error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
                     }
                 });
         // Access the RequestQueue through your singleton class.
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             request = requests.get((String)marker.getTag());
         } catch (Exception e) {
-            Log.e("Error", e.getMessage());
+            Log.e("requests.get Error", e.getMessage());
             return;
         }
         Log.d(DEBUG, request.getInfo());
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     marker.getPosition().longitude, 1);
             selectionLocation = markerAddress.get(0).getAddressLine(0);
         } catch (IOException e) {
-
+            Log.d(DEBUG, "Could not find address");
         }
 
         textViewSelectionLocation.setText(selectionLocation);
@@ -316,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == R.id.home_button) {
             switchActivity(MainActivity.class);
         } else if (v.getId() == R.id.create_request_button) {
-            Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
+            switchActivity(CreateRequest.class);
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_comments_button) {

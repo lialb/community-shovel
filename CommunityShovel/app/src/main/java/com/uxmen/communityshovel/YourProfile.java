@@ -70,10 +70,9 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
 
     public void onClick(View v) {
         if (v.getId() == R.id.home_button) {
-            Toast.makeText(this, "Going Home", Toast.LENGTH_SHORT).show();
             switchActivity(MainActivity.class);
         } else if (v.getId() == R.id.create_request_button) {
-            Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
+            switchActivity(CreateRequest.class);
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
         } else if (v.getId() == R.id.edit_profile_button) {

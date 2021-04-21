@@ -33,4 +33,11 @@
     <string name="submit_button_text"> Submit </string>
 
     <string name="profile_view_comments_label"><u>View Comments</u></string>
+
+    <string name="confirm_text"> Confirm </string>
+    <string name="cancel_text"> Cancel </string>
+    <string name="location_text"> Location: </string>
+    <string name="info_text"> Info: </string>
+    <string name="enter_text"> Enter Request Info Here </string>
+    <string name="location_default_label"> Tap location on map </string>
 </resources>
