@@ -172,7 +172,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        if (error != null && error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
                     }
                 });
         // Access the RequestQueue through your singleton class.
@@ -221,9 +223,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Request request;
         // find request based on the provided key
         try {
+            // TODO: do not index directly based off of tag! This isn't an integer
+            // example request id: -MYp3696RBcdiXHeDG0C
             request = requests.get(Integer.parseInt((String)marker.getTag()));
         } catch (Exception e) {
-            Log.e("Error", e.getMessage());
+            Log.e("requests.get Error", e.getMessage());
             return;
         }
         Log.d(DEBUG, request.getInfo());
