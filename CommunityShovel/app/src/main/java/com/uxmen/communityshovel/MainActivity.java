@@ -37,6 +37,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button volunteerButton;
     private ImageButton upvoteButton;
     private User activeUser;
-    private ArrayList<Request> requests = new ArrayList<Request>();
+    HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
     private Marker curMarker = null;
@@ -150,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
                                         Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
-                                        requests.add(r);
+                                        requests.put(key, r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
                                         Log.d(DEBUG, loc.toString());
@@ -223,9 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Request request;
         // find request based on the provided key
         try {
-            // TODO: do not index directly based off of tag! This isn't an integer
-            // example request id: -MYp3696RBcdiXHeDG0C
-            request = requests.get(Integer.parseInt((String)marker.getTag()));
+            request = requests.get((String)marker.getTag());
         } catch (Exception e) {
             Log.e("requests.get Error", e.getMessage());
             return;
