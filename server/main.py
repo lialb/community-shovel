@@ -103,8 +103,8 @@ def upvote_request(request_id):
 
     return json.dumps({'Success' : True})
 
-@app.route('/add-comment/<string:request_id>', methods=['POST'])
-def add_comment(request_id):
+@app.route('/add-request-comment/<string:request_id>', methods=['POST'])
+def add_request_comment(request_id):
     '''
     Adds comment to request with request_id. Takes in JSON body with user_id, name, and comment parameters.
     '''
@@ -120,19 +120,17 @@ def add_comment(request_id):
             } 
         }
 
-        db.child('requests').child(request_id).push({ 'comments' : data })
+        db.child('requests').child(request_id).child('comments').set(data)
         return json.dumps({'Success' : True})
-
     next_index = len(comments)
     data = { 
-        next_index : { 
-            'comment' : body['comment'], 
-            'name' : body['name'], 
-            'user_id' : body['user_id'] 
-        } 
+        'comment' : body['comment'], 
+        'name' : body['name'], 
+        'user_id' : body['user_id'] 
     }
-    db.child('requests').child(request_id).child('comments').push(data)
+    db.child('requests').child(request_id).child('comments').child(next_index).set(data)
     return json.dumps({'Success' : True})
+
 
 @app.route('/get-user/<string:email>')
 def get_user(email):
@@ -173,6 +171,34 @@ def update_user(email):
     except:
         print('Something went wrong')
         return Response('1', status=406)
+    
+@app.route('/add-user-comment/<string:email>', methods=['POST'])
+def add_user_comment(email):
+    '''
+    Adds comment to user profile with email. Takes in JSON body with user_id, name, and comment parameters.
+    '''
+    body = request.json
+    db = firebase.database()
+    comments = db.child('users').child(email).child('comments').get().val()
+    if not comments:
+        data = { 
+            0 : { 
+                'comment' : body['comment'], 
+                'name' : body['name'],
+                'user_id' : body['user_id'] 
+            } 
+        }
+
+        db.child('users').child(email).child('comments').set(data)
+        return json.dumps({'Success' : True})
+    next_index = len(comments)
+    data = { 
+        'comment' : body['comment'], 
+        'name' : body['name'], 
+        'user_id' : body['user_id'] 
+    }
+    db.child('users').child(email).child('comments').child(next_index).set(data)
+    return json.dumps({'Success' : True})
 
 
 @app.route('/login', methods=['POST'])

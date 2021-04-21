@@ -1,9 +1,10 @@
 package com.uxmen.communityshovel;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Address;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button volunteerButton;
     private ImageButton upvoteButton;
     private User activeUser;
-    HashMap<String, Request> requests = new HashMap<String, Request>();
+    private HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
     private Marker curMarker = null;
@@ -73,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         activeUser = getIntent().getParcelableExtra("active_user");
         Log.d(DEBUG, "Main Activity: bio = " + activeUser.getBio());
-
+        
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+            .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         JSONObject request = (JSONObject)response.get(key);
                                         Log.d(DEBUG, request.toString());
                                         Log.d(DEBUG, "key: " + key);
+                                        String requestId = key;
                                         String creatorId = request.getString("creator_id");
                                         String info = request.getString("info");
 
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         int upvotes = request.getInt("upvotes");
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
-                                        Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
+                                        Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
                                         requests.put(key, r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
@@ -260,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.selectionVisible = true;
         }
 
+        Log.d(DEBUG, "requestId: " + request.getRequestId());
         // add onClick listener for empty space?
     }
 
@@ -322,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d(DEBUG, "Viewing comments for selection");
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
             Log.d(DEBUG, "Volunteering for selection");
+            confirmVolunteer();
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
@@ -358,6 +362,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void confirmVolunteer() {
+        // Create the object of
+        // AlertDialog Builder class
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(this);
+
+        // Set the message show for the Alert time
+        builder.setMessage("Do you want to volunteer for this project?");
+
+        // Set Alert Title
+        builder.setTitle("Alert");
+
+        // Set Cancelable false
+        // for when the user clicks on the outside
+        // the Dialog Box then it will remain show
+        builder.setCancelable(false);
+
+        // Set the positive button with yes name
+        // OnClickListener method is use of
+        // DialogInterface interface.
+        builder.setPositiveButton(
+                "Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(DEBUG, "Confirming volunteer for request");
+                    }
+                });
+
+        // Set the Negative button with No name
+        // OnClickListener method is use
+        // of DialogInterface interface.
+        builder.setNegativeButton(
+                "No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(DEBUG, "Canceling volunteer for request");
+                        //dialog.cancel();
+                    }
+                });
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+        // Show the Alert Dialog box
+        alertDialog.show();
     }
 
     /**
