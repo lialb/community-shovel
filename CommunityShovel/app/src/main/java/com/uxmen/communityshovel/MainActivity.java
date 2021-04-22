@@ -1,14 +1,11 @@
 package com.uxmen.communityshovel;
 
-/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 import androidx.appcompat.app.AlertDialog;
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
-/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 import android.content.DialogInterface;
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Address;
@@ -63,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
-    /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
     private Boolean volunteerVisible = false;
-    /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
     private Marker curMarker = null;
 
     @Override
@@ -287,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             moveCameraToMarker(this.curMarker, 0.0);
         }
     }
-    /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 
     public void showVolunteer() {
         // populate volunteer overlay with request details
@@ -433,8 +427,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
-    /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
     protected void onSaveInstanceState(Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         Log.d(DEBUG, "onSavedInstanceState()");
@@ -491,7 +483,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Request curRequest = requests.get((String)this.curMarker.getTag());
             curRequest.setUpvotes(curRequest.getUpvotes() + 1);
         }
-        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
+
         else if (this.volunteerVisible && v.getId() == R.id.stop_volunteer_button) {
             stopVolunteer();
             Log.d(DEBUG, "Stopping volunteer");
@@ -502,7 +494,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             completedVolunteer();
             Log.d(DEBUG, "Completed volunteering");
         }
-        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
     }
 
     public void upvoteSelection() {
