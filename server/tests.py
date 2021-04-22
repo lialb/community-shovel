@@ -11,8 +11,11 @@ def login_test():
     return r
 
 def create_account_test():
-    r = requests.post(f'{HOST}/create-account', json={ 'firstName' : 'Brian', 'lastName' : 'Bailey', 'password': 'password', 'email' : 'mbailey2@fake.com', 'bio' : 'CS 465 Professor'})
+    # r = requests.post(f'{HOST}/create-account', json={ 'firstName' : 'Brian', 'lastName' : 'Bailey', 'password': 'password', 'email' : 'mbailey7@fake.com', 'bio' : 'CS 465 Professor'})
+    r = requests.post(f'{HOST}/create-account', json={'firstName': 'greg', 'lastName': 'johnson', 'password': 'abcdefg', 'email': 'test@fake.com', 'bio': 'my bio'})
     return r
 
-print(login_test())
+def update_user_test():
+    r = requests.put(f'{HOST}/update-user/albert@fake,com', json={'bio': 'changed bio'})
 
+update_user_test()

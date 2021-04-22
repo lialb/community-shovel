@@ -12,6 +12,10 @@
     <string name="distance_shoveled_label"> Distance Shoveled: </string>
     <string name="people_impacted_label"> People Impacted: </string>
     <string name="bio_label"> Biography: </string>
+    <string name="edit_profile_button_text"> Edit </string>
+    <string name="edit_your_profile_text"> Editing Your Profile </string>
+    <string name="save_profile_button_text"> Save </string>
+    <string name="logout_button_text"> Logout </string>
 
     <string name="location_label"> Location: </string>
     <string name="upvotes_label"> Upvotes: </string>
@@ -27,4 +31,13 @@
     <string name="last_name_hint"> Last Name </string>
     <string name="bio_hint"> Bio </string>
     <string name="submit_button_text"> Submit </string>
+
+    <string name="profile_view_comments_label"><u>View Comments</u></string>
+
+    <string name="confirm_text"> Confirm </string>
+    <string name="cancel_text"> Cancel </string>
+    <string name="location_text"> Location: </string>
+    <string name="info_text"> Info: </string>
+    <string name="enter_text"> Enter Request Info Here </string>
+    <string name="location_default_label"> Tap location on map </string>
 </resources>

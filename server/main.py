@@ -4,6 +4,7 @@ import json
 import pyrebase
 import config
 from requests.exceptions import HTTPError
+import time
 
 '''
 HTTP Server API interfacing firebase for the Community Shovel App
@@ -40,9 +41,46 @@ def create_request():
     Creates a request through JSON body. Needs creator_id, info, time, x_coord, y_coord, and comments
     '''
     db = firebase.database()
-    db.child('requests').push(request.json)
+    body = request.json
+    body['status'] = 0
+    db.child('requests').push(body)
 
     return json.dumps({'Success' : True})
+
+@app.route('/volunteer-for-request/<string:request_id>', methods=['PUT'])
+def volunteer_for_request(request_id):
+    '''
+    Adds a user to volunteer for a request. Takes in email through JSON body
+    '''
+    try:
+        body = request.json
+        db = firebase.database()
+        if '.' in body['email']:
+            body['email'] = body['email'].replace('.', ',')
+        db.child('requests').child(request_id).child('volunteers').set({ body['email']: int(time.time()) })
+
+        return json.dumps({'Success' : True})
+    except:
+        print('Something went wrong.')
+        return Response('1', status=400)
+    
+@app.route('/remove-volunteer/<string:request_id>', methods=['PUT'])
+def remove_volunteer(request_id):
+    '''
+    Remove a volunteer from a request. Takes in email through JSON body
+    '''
+    try:
+        body = request.json
+        db = firebase.database()
+        if '.' in body['email']:
+            body['email'] = body['email'].replace('.', ',')
+        db.child('requests').child(request_id).child('volunteers').child(body['email']).remove()
+
+        return json.dumps({'Success' : True})
+    except:
+        print('Something went wrong.')
+        return Response('1', status=400)
+
 
 @app.route('/update-request/<string:request_id>', methods=['PUT'])
 def update_request(request_id):
@@ -65,8 +103,8 @@ def upvote_request(request_id):
 
     return json.dumps({'Success' : True})
 
-@app.route('/add-comment/<string:request_id>', methods=['POST'])
-def add_comment(request_id):
+@app.route('/add-request-comment/<string:request_id>', methods=['POST'])
+def add_request_comment(request_id):
     '''
     Adds comment to request with request_id. Takes in JSON body with user_id, name, and comment parameters.
     '''
@@ -82,28 +120,86 @@ def add_comment(request_id):
             } 
         }
 
-        db.child('requests').child(request_id).push({ 'comments' : data })
+        db.child('requests').child(request_id).child('comments').set(data)
         return json.dumps({'Success' : True})
-
     next_index = len(comments)
     data = { 
-        next_index : { 
-            'comment' : body['comment'], 
-            'name' : body['name'], 
-            'user_id' : body['user_id'] 
-        } 
+        'comment' : body['comment'], 
+        'name' : body['name'], 
+        'user_id' : body['user_id'] 
     }
-    db.child('requests').child(request_id).child('comments').push(data)
+    db.child('requests').child(request_id).child('comments').child(next_index).set(data)
     return json.dumps({'Success' : True})
 
-@app.route('/get-user/<string:user_id>')
-def get_user(user_id):
+
+@app.route('/get-user/<string:email>')
+def get_user(email):
     '''
-    Gets user info based on user_id
+    Gets user info based on email. 
+    MAKE SURE TO REPLACE PERIODS WITH COMMAS IN EMAIL BEFORE CALLING THIS ROUTE
+    '''
+    if '.' in email:
+        email = email.replace('.', ',')
+    db = firebase.database()
+    user_data = db.child('users').child(email).get().val()
+    return json.dumps(user_data)
+
+@app.route('/update-user/<string:email>', methods=['PUT'])
+def update_user(email):
+    '''
+    Updates a user's first name, last name, and/or bio. Accepts JSON body and email url parameter
+    MAKE SURE TO REPLACE PERIODS WITH COMMAS IN EMAIL BEFORE CALLING THIS ROUTE
     '''
     db = firebase.database()
-    user_data = db.child('users').child(user_id).get().val()
-    return json.dumps(user_data)
+    try:
+        body = request.json
+        data = {}
+        if 'first_name' in body:
+            data['first_name'] = body['first_name']
+            
+        if 'last_name' in body:
+            data['last_name'] = body['last_name']
+
+        if 'bio' in body:
+            data['bio'] = body['bio']
+        if '.' in email:
+            email = email.replace('.', ',')
+        
+        db.child('users').child(email).update(data)
+
+        return json.dumps({'Success' : True})
+    except:
+        print('Something went wrong')
+        return Response('1', status=406)
+    
+@app.route('/add-user-comment/<string:email>', methods=['POST'])
+def add_user_comment(email):
+    '''
+    Adds comment to user profile with email. Takes in JSON body with user_id, name, and comment parameters.
+    '''
+    body = request.json
+    db = firebase.database()
+    comments = db.child('users').child(email).child('comments').get().val()
+    if not comments:
+        data = { 
+            0 : { 
+                'comment' : body['comment'], 
+                'name' : body['name'],
+                'user_id' : body['user_id'] 
+            } 
+        }
+
+        db.child('users').child(email).child('comments').set(data)
+        return json.dumps({'Success' : True})
+    next_index = len(comments)
+    data = { 
+        'comment' : body['comment'], 
+        'name' : body['name'], 
+        'user_id' : body['user_id'] 
+    }
+    db.child('users').child(email).child('comments').child(next_index).set(data)
+    return json.dumps({'Success' : True})
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -116,9 +212,9 @@ def login():
         body = request.json
         auth = firebase.auth()
         user = auth.sign_in_with_email_and_password(body['email'], body['password'])
-        db = firebase.database()
-        data = { 'email' : body['email'] }
-        results = db.child('users').push(data, user['idToken'])
+        # db = firebase.database()
+        # data = { 'email' : body['email'] }
+        # results = db.child('users').push(data, user['idToken'])
         return json.dumps({'Success' : True})
     except HTTPError as e:
         print(e)
@@ -129,7 +225,7 @@ def create_account():
     '''
     Creates an account based on JSON body with email, password, first_name, last_name, and bio parameters.
     Password is not saved in Realtime Database
-    WILL FAIL IF DUPLICATE EMAIL EXISTS
+    WILL FAIL IF DUPLICATE EMAIL EXISTS OR PASSWORD IS UNDER 6 CHARACTERS
     '''
     try:
         body = request.json
