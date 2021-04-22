@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,26 +77,52 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
         ArrayList<String> commentCheck = curRequest.getComments();
 
+        if (commentCheck.isEmpty()) {
+            findViewById(R.id.Comment1).setVisibility(View.GONE);
+            findViewById(R.id.Comment2).setVisibility(View.GONE);
+            findViewById(R.id.Comment3).setVisibility(View.GONE);
+            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+        }
+
         if (commentCheck.size() == 1) {
+
             findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+            findViewById(R.id.Comment2).setVisibility(View.GONE);
+            findViewById(R.id.Comment3).setVisibility(View.GONE);
+            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+
             if (commentCheck.get(0) != null) {
                 try {
                     JSONObject comm = new JSONObject(commentCheck.get(0));
+                    comment1.setText(comm.getString("comment"));
                 } catch (JSONException e) {
-
+                    Log.e("JSONObject Error", e.getMessage());
                 }
-                    comment1.setText(commentCheck.get(0));
+
             }
         }
 
         else if (commentCheck.size() == 2) {
             findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
             findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
+            findViewById(R.id.Comment3).setVisibility(View.GONE);
+            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+//            JSONArray comm = new JSONArray(commentCheck);
             if (commentCheck.get(0) != null) {
-                comment1.setText(commentCheck.get(0));
+                try {
+                    JSONObject comm = new JSONObject(commentCheck.get(0));
+                    comment1.setText(comm.getString("comment"));
+                } catch (JSONException e) {
+                    Log.e("JSONObject Error", e.getMessage());
+                }
             }
             if (commentCheck.get(1) != null) {
-                comment2.setText(commentCheck.get(1));
+                try {
+                    JSONObject comm = new JSONObject(commentCheck.get(1));
+                    comment1.setText(comm.getString("comment"));
+                } catch (JSONException e) {
+                    Log.e("JSONObject Error", e.getMessage());
+                }
             }
         }
 
@@ -103,14 +130,31 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
             findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
             findViewById(R.id.Comment3).setVisibility(View.VISIBLE);
+            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+//            JSONArray comm = new JSONArray(commentCheck);
             if (commentCheck.get(0) != null) {
-                comment1.setText(commentCheck.get(0));
+                try {
+                    JSONObject comm = new JSONObject(commentCheck.get(0));
+                    comment1.setText(comm.getString("comment"));
+                } catch (JSONException e) {
+                    Log.e("JSONObject Error", e.getMessage());
+                }
             }
             if (commentCheck.get(1) != null) {
-                comment2.setText(commentCheck.get(1));
+                try {
+                    JSONObject comm = new JSONObject(commentCheck.get(1));
+                    comment1.setText(comm.getString("comment"));
+                } catch (JSONException e) {
+                    Log.e("JSONObject Error", e.getMessage());
+                }
             }
             if (commentCheck.get(2) != null) {
-                comment3.setText(commentCheck.get(2));
+                try {
+                    JSONObject comm = new JSONObject(commentCheck.get(2));
+                    comment1.setText(comm.getString("comment"));
+                } catch (JSONException e) {
+                    Log.e("JSONObject Error", e.getMessage());
+                }
             }
         }
 

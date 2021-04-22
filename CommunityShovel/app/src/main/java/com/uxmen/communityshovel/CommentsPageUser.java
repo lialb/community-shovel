@@ -16,10 +16,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class CommentsPageUser  extends AppCompatActivity implements View.OnClickListener{
 
@@ -29,8 +34,13 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     private ImageButton createRequestButton;
     private ImageButton profileButton;
     private User activeUser;
-
+    private com.uxmen.communityshovel.Request curRequest;
+    private Button postComment;
     private EditText addComment;
+    private TextView comment1;
+    private TextView comment2;
+    private TextView comment3;
+    private TextView commentCur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +56,138 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         profileButton = (ImageButton) findViewById(R.id.profile_button);
         Button postComment = (Button) findViewById(R.id.add_comment_button);
 
+        homeButton = (ImageButton) findViewById(R.id.home_button);
+        createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
+        profileButton = (ImageButton) findViewById(R.id.profile_button);
+        this.postComment = (Button) findViewById(R.id.add_comment_button);
+        this.comment1 = (TextView) findViewById(R.id.Comment1);
+        this.comment2 = (TextView) findViewById(R.id.Comment2);
+        this.comment3 = (TextView) findViewById(R.id.Comment3);
+        this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
+
+
+
+        findViewById(R.id.Comment1).setVisibility(View.GONE);
+        findViewById(R.id.Comment2).setVisibility(View.GONE);
+        findViewById(R.id.Comment3).setVisibility(View.GONE);
+        findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
         postComment.setOnClickListener(this);
 
         addComment = (EditText) findViewById(R.id.comment_text);
+
+
+        String finalEmail = activeUser.getEmail().replace('.', ',');
+        String url ="http://10.0.2.2:5000/get-user/" + finalEmail;
+        SetTextBox(url);
+
+    }
+
+    private void SetTextBox(String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.d(DEBUG, response.toString());
+
+//                            String firstName = response.getString("first_name");
+                            JSONArray commentCheck = response.getJSONArray("comments");
+
+                            // everything set to GONE inside here instead of outside because otherwise it would always be blank
+                            if (commentCheck.length() == 0) {
+                                findViewById(R.id.Comment1).setVisibility(View.GONE);
+                                findViewById(R.id.Comment2).setVisibility(View.GONE);
+                                findViewById(R.id.Comment3).setVisibility(View.GONE);
+                                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+                            }
+
+                            else if (commentCheck.length() == 1) {
+                                findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+                                findViewById(R.id.Comment2).setVisibility(View.GONE);
+                                findViewById(R.id.Comment3).setVisibility(View.GONE);
+                                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+                                if (commentCheck.get(0) != null) {
+                                    try {
+                                        JSONObject jsonobject = commentCheck.getJSONObject(0);
+                                        comment1.setText(jsonobject.getString("comment"));
+                                    } catch (JSONException e) {
+                                        Log.e("JSONObject Error", e.getMessage());
+                                    }
+                                }
+                            }
+
+                            else if (commentCheck.length() == 2) {
+                                findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+                                findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
+                                findViewById(R.id.Comment3).setVisibility(View.GONE);
+                                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+
+                                if (commentCheck.get(0) != null) {
+                                    try {
+                                        JSONObject jsonobject = commentCheck.getJSONObject(0);
+                                        comment1.setText(jsonobject.getString("comment"));
+                                    } catch (JSONException e) {
+                                        Log.e("JSONObject Error", e.getMessage());
+                                    }
+                                }
+
+                                if (commentCheck.get(1) != null) {
+                                    try {
+                                        JSONObject jsonobject = commentCheck.getJSONObject(1);
+                                        comment2.setText(jsonobject.getString("comment"));
+                                    } catch (JSONException e) {
+                                        Log.e("JSONObject Error", e.getMessage());
+                                    }
+                                }
+                            }
+                            else if (commentCheck.length() == 3) {
+                                findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+                                findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
+                                findViewById(R.id.Comment3).setVisibility(View.VISIBLE);
+                                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+
+                                if (commentCheck.get(0) != null) {
+                                    try {
+                                        JSONObject jsonobject = commentCheck.getJSONObject(0);
+                                        comment1.setText(jsonobject.getString("comment"));
+                                    } catch (JSONException e) {
+                                        Log.e("JSONObject Error", e.getMessage());
+                                    }
+                                }
+
+                                if (commentCheck.get(1) != null) {
+                                    try {
+                                        JSONObject jsonobject = commentCheck.getJSONObject(1);
+                                        comment2.setText(jsonobject.getString("comment"));
+                                    } catch (JSONException e) {
+                                        Log.e("JSONObject Error", e.getMessage());
+                                    }
+                                }
+
+                                if (commentCheck.get(2) != null) {
+                                    try {
+                                        JSONObject jsonobject = commentCheck.getJSONObject(2);
+                                        comment3.setText(jsonobject.getString("comment"));
+                                    } catch (JSONException e) {
+                                        Log.e("JSONObject Error", e.getMessage());
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            Log.e("JSON Exception", e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                    }
+                });
+
     }
 
     // to post comment to requests, copied from EditProfile
@@ -80,8 +216,9 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                     Toast.makeText(v.getContext(), "Invalid Comment", Toast.LENGTH_SHORT).show();
                 });
 
+        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-
+        this.commentCur.setText(this.addComment.getText().toString());
 
     }
 
@@ -99,7 +236,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
             switchActivity(YourProfile.class);
         } else if (v.getId() == R.id.add_comment_button) {
             postCommentUser(v);
-            switchActivity(YourProfile.class);
+//            switchActivity(YourProfile.class);
         }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
