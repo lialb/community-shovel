@@ -63,10 +63,10 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
 
 
-        findViewById(R.id.Comment1).setVisibility(View.GONE);
-        findViewById(R.id.Comment2).setVisibility(View.GONE);
-        findViewById(R.id.Comment3).setVisibility(View.GONE);
-        findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+//        findViewById(R.id.Comment1).setVisibility(View.GONE);
+//        findViewById(R.id.Comment2).setVisibility(View.GONE);
+//        findViewById(R.id.Comment3).setVisibility(View.GONE);
+//        findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
@@ -77,6 +77,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
         ArrayList<String> commentCheck = curRequest.getComments();
         try {
+
             JSONArray commentArr = new JSONArray(commentCheck.get(0));
 
             if (commentArr.length() == 0 ) {
