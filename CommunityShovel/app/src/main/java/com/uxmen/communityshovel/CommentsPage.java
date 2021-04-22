@@ -140,6 +140,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
         Log.d(DEBUG, this.addComment.getText().toString());
         this.commentCur.setText(this.addComment.getText().toString());
+        this.addComment.setText("");
 
     }
 
