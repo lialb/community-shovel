@@ -1,15 +1,11 @@
 package com.uxmen.communityshovel;
 
-/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 import androidx.appcompat.app.AlertDialog;
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
-/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 import android.content.DialogInterface;
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Address;
@@ -43,6 +39,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,12 +57,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button volunteerButton;
     private ImageButton upvoteButton;
     private User activeUser;
-    private ArrayList<Request> requests = new ArrayList<Request>();
+    private HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
-    /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
     private Boolean volunteerVisible = false;
-    /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
     private Marker curMarker = null;
 
     @Override
@@ -156,17 +151,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         } catch (JSONException e) {
                                             Log.d(DEBUG, e.getMessage());
                                         }
-                                        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
                                         String req_id = key;
-                                        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
                                         int time = request.getInt("time");
                                         int upvotes = request.getInt("upvotes");
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
-                                        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
                                         Request r = new Request(creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord, req_id);
-                                        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-                                        requests.add(r);
+                                        requests.put(key, r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
                                         Log.d(DEBUG, loc.toString());
@@ -237,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Request request;
         // find request based on the provided key
         try {
-            request = requests.get(Integer.parseInt((String)marker.getTag()));
+            request = requests.get((String)marker.getTag());
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             return;
@@ -287,7 +278,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             moveCameraToMarker(this.curMarker, 0.0);
         }
     }
-    /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 
     public void showVolunteer() {
         // populate volunteer overlay with request details
@@ -391,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Request request;
         // find request based on the provided key
         try {
-            request = requests.get(Integer.parseInt((String)this.curMarker.getTag()));
+            request = requests.get((String)this.curMarker.getTag());
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             return;
@@ -432,8 +422,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
-
-    /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
     protected void onSaveInstanceState(Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -489,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
             //upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
         }
-        /*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
+
         else if (this.volunteerVisible && v.getId() == R.id.stop_volunteer_button) {
             stopVolunteer();
             Log.d(DEBUG, "Stopping volunteer");
@@ -500,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             completedVolunteer();
             Log.d(DEBUG, "Completed volunteering");
         }
-        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
     }
 
     public void upvoteSelection() {
