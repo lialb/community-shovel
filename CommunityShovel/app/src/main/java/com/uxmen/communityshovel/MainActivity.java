@@ -151,9 +151,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                         int time = request.getInt("time");
                                         int upvotes = request.getInt("upvotes");
+                                        int status = request.getInt("status");
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
-                                        Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
+                                        Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, status, xCoord, yCoord);
                                         requests.put(key, r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
@@ -237,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView textViewSelectionLocation = (TextView) findViewById(R.id.selection_location_text);
         TextView textViewSelectionUpvotes = (TextView) findViewById(R.id.selection_upvotes_text);
         TextView textViewSelectionInfo = (TextView) findViewById(R.id.selection_info_text);
+        TextView textViewSelectionStatus = (TextView) findViewById(R.id.selection_status_text);
 
         Context context = this;
         Geocoder geo = new Geocoder(context);
@@ -248,10 +250,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IOException e) {
             Log.d(DEBUG, "Could not find address");
         }
+        String statusText = "Incomplete";
+        if (request.getStatus() == 1) {
+            statusText = "Partially complete";
+        } else if (request.getStatus() == 2) {
+            statusText = "Complete";
+        }
 
         textViewSelectionLocation.setText(selectionLocation);
         textViewSelectionUpvotes.setText(String.valueOf(request.getUpvotes()));
         textViewSelectionInfo.setText(request.getInfo());
+        textViewSelectionStatus.setText(statusText);
 
         // make selection overlay visible
         if (!this.selectionVisible) {

@@ -170,6 +170,10 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
             switchActivity(YourProfile.class);
         } else if (v.getId() == R.id.volunteer_view_comments_button) {
             Log.d(DEBUG, "Viewing comments for selection");
+            Intent intent = new Intent(getBaseContext(), CommentsPage.class);
+            intent.putExtra("cur_request", this.curRequest);
+            intent.putExtra("active_user", activeUser);
+            startActivity(intent);
         } else if (v.getId() == R.id.volunteer_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
@@ -194,7 +198,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         String url;
         // find request based on the provided key
         try {
-            url = "http://10.0.2.2:5000/upvote-request/" + this.curMarker.getTag();
+            url = "http://10.0.2.2:5000/upvote-request/" + this.curRequest.getRequestId();
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             return;
@@ -282,6 +286,8 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
 
     //Update the status of curMarker
     public void updateReqStatus(int status) {
+
+
         String url;
         // find request based on the provided key
         try {

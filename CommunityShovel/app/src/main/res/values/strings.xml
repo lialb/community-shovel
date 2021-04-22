@@ -20,6 +20,7 @@
     <string name="location_label"> Location: </string>
     <string name="upvotes_label"> Upvotes: </string>
     <string name="info_label"> Info: </string>
+    <string name="status_label"> Status: </string>
     <string name="view_comments_label"><u>View Comments</u></string>
 
     <string name="email_hint"> Email </string>
