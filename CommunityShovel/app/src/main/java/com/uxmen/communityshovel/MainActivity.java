@@ -1,8 +1,9 @@
 package com.uxmen.communityshovel;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -150,9 +151,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                         int time = request.getInt("time");
                                         int upvotes = request.getInt("upvotes");
+                                        int status = request.getInt("status");
                                         double xCoord = request.getDouble("x_coord");
                                         double yCoord = request.getDouble("y_coord");
-                                        Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, xCoord, yCoord);
+                                        Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, status, xCoord, yCoord);
                                         requests.put(key, r);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
@@ -236,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView textViewSelectionLocation = (TextView) findViewById(R.id.selection_location_text);
         TextView textViewSelectionUpvotes = (TextView) findViewById(R.id.selection_upvotes_text);
         TextView textViewSelectionInfo = (TextView) findViewById(R.id.selection_info_text);
+        TextView textViewSelectionStatus = (TextView) findViewById(R.id.selection_status_text);
 
         Context context = this;
         Geocoder geo = new Geocoder(context);
@@ -243,14 +246,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             List<Address> markerAddress = geo.getFromLocation(marker.getPosition().latitude,
                     marker.getPosition().longitude, 1);
-            selectionLocation = markerAddress.get(0).getAddressLine(0);
+            selectionLocation = markerAddress.get(0).getAddressLine(0).split(",", 2)[0];
         } catch (IOException e) {
             Log.d(DEBUG, "Could not find address");
+        }
+        String statusText = "Incomplete";
+        if (request.getStatus() == 1) {
+            statusText = "Partially complete";
+        } else if (request.getStatus() == 2) {
+            statusText = "Complete";
         }
 
         textViewSelectionLocation.setText(selectionLocation);
         textViewSelectionUpvotes.setText(String.valueOf(request.getUpvotes()));
         textViewSelectionInfo.setText(request.getInfo());
+        textViewSelectionStatus.setText(statusText);
 
         // make selection overlay visible
         if (!this.selectionVisible) {
@@ -331,7 +341,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //switchActivity(CommentsPage.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
             Log.d(DEBUG, "Volunteering for selection");
-            confirmVolunteer();
+            Intent intent = new Intent(getBaseContext(), VolunteerPage.class);
+            Request r = requests.get((String)this.curMarker.getTag());
+            intent.putExtra("cur_request", r);
+            intent.putExtra("active_user", activeUser);
+            startActivity(intent);
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
@@ -368,51 +382,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-    }
-
-    public void confirmVolunteer() {
-        // Create the object of
-        // AlertDialog Builder class
-        AlertDialog.Builder builder
-                = new AlertDialog
-                .Builder(this);
-
-        // Set the message show for the Alert time
-        builder.setMessage("Do you want to volunteer for this project?");
-
-        // Set Alert Title
-        builder.setTitle("Alert");
-
-        // Set Cancelable false
-        // for when the user clicks on the outside
-        // the Dialog Box then it will remain show
-        builder.setCancelable(false);
-
-        // Set the positive button with yes name
-        // OnClickListener method is use of
-        // DialogInterface interface.
-        builder.setPositiveButton(
-                "Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(DEBUG, "Confirming volunteer for request");
-                    }
-                });
-
-        // Set the Negative button with No name
-        // OnClickListener method is use
-        // of DialogInterface interface.
-        builder.setNegativeButton(
-                "No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(DEBUG, "Canceling volunteer for request");
-                        //dialog.cancel();
-                    }
-                });
-
-        // Create the Alert dialog
-        AlertDialog alertDialog = builder.create();
-        // Show the Alert Dialog box
-        alertDialog.show();
     }
 
     /**

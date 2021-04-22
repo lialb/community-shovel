@@ -7,47 +7,43 @@
     android:gravity="center">
 
     <!-- Map and overlay -->
-    <FrameLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="88">
+        android:layout_weight="88"
+        android:orientation="vertical">
         <!-- Map -->
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <!-- Selection Overlay -->
+            android:layout_height="0dp"
+            android:layout_weight="40"/>
+        <!-- Volunteer Section -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <!-- invisible spacer -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="50"/>
-            <!-- toggleable overlay -->
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="60">
             <LinearLayout
                 android:id="@+id/selection"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                android:layout_weight="50"
-                android:background="@drawable/layout_bg"
+                android:background="@android:color/white"
                 android:weightSum="100"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/selection_details"
+                    android:id="@+id/volunteer_details"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="80"
+                    android:layout_weight="55"
                     android:orientation="vertical">
                     <!-- Location -->
                     <LinearLayout
-                        android:id="@+id/selection_location"
+                        android:id="@+id/volunteer_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
@@ -65,7 +61,7 @@
                             android:textStyle="bold"
                             android:textSize="20sp" />
                         <TextView
-                            android:id="@+id/selection_location_text"
+                            android:id="@+id/volunteer_location_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#000"
@@ -74,7 +70,7 @@
                     </LinearLayout>
                     <!-- Upvotes -->
                     <LinearLayout
-                        android:id="@+id/selection_upvotes"
+                        android:id="@+id/volunteer_upvotes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
@@ -93,14 +89,14 @@
                             android:textStyle="bold"
                             android:textSize="20sp" />
                         <TextView
-                            android:id="@+id/selection_upvotes_text"
+                            android:id="@+id/volunteer_upvotes_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
                             android:textColor="#000"
                             android:textSize="20sp" />
                         <ImageButton
-                            android:id="@+id/selection_upvote_button"
+                            android:id="@+id/volunteer_upvote_button"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_centerHorizontal="true"
@@ -114,7 +110,7 @@
                     </LinearLayout>
                     <!-- Info -->
                     <LinearLayout
-                        android:id="@+id/selection_info"
+                        android:id="@+id/volunteer_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
@@ -132,7 +128,7 @@
                             android:textStyle="bold"
                             android:textSize="20sp" />
                         <TextView
-                            android:id="@+id/selection_info_text"
+                            android:id="@+id/volunteer_info_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#000"
@@ -140,7 +136,7 @@
                     </LinearLayout>
                     <!-- Status -->
                     <LinearLayout
-                        android:id="@+id/selection_status"
+                        android:id="@+id/volunteer_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
@@ -158,14 +154,14 @@
                             android:textStyle="bold"
                             android:textSize="20sp" />
                         <TextView
-                            android:id="@+id/selection_status_text"
+                            android:id="@+id/volunteer_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#000"
                             android:textSize="20sp" />
                     </LinearLayout>
                     <Button
-                        android:id="@+id/selection_view_comments_button"
+                        android:id="@+id/volunteer_view_comments_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
@@ -177,22 +173,45 @@
 
                 </LinearLayout>
                 <Button
-                    android:id="@+id/selection_volunteer_button"
+                    android:id="@+id/stop_volunteer_button"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_below="@id/selection_details"
-                    android:layout_weight="20"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_weight="15"
+
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:textAllCaps="false"
-                    android:textSize="26sp"
-                    android:text="Volunteer"/>
+                    android:textSize="24sp"
+                    android:text="Stop Volunteering"/>
+                <Button
+                    android:id="@+id/mark_partial_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/stop_volunteer_button"
+                    android:layout_weight="15"
+
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="24sp"
+                    android:text="Mark Partially Complete"/>
+                <Button
+                    android:id="@+id/mark_complete_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/mark_partial_button"
+                    android:layout_weight="15"
+
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="24sp"
+                    android:text="Mark Complete"/>
 
             </LinearLayout>
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
     <!-- Nav Bar -->
     <RelativeLayout

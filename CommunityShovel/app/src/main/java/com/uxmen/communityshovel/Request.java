@@ -13,10 +13,11 @@ public class Request implements Parcelable {
     private String comments;
     private int time;
     private int upvotes;
+    private int status;
     private double xCoord;
     private double yCoord;
 
-    public Request(String requestId, String creatorId, String info, String volunteers, String comments, int time, int upvotes, double xCoord, double yCoord) {
+    public Request(String requestId, String creatorId, String info, String volunteers, String comments, int time, int upvotes, int status, double xCoord, double yCoord) {
         this.requestId = requestId;
         this.creatorId = creatorId;
         this.info = info;
@@ -24,6 +25,7 @@ public class Request implements Parcelable {
         this.comments = comments;
         this.time = time;
         this.upvotes = upvotes;
+        this.status = status;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
     }
@@ -36,6 +38,7 @@ public class Request implements Parcelable {
         this.comments = source.readString();
         this.time = source.readInt();
         this.upvotes = source.readInt();
+        this.status = source.readInt();
         this.xCoord = source.readDouble();
         this.yCoord = source.readDouble();
     }
@@ -54,6 +57,7 @@ public class Request implements Parcelable {
         dest.writeString(this.comments);
         dest.writeInt(this.time);
         dest.writeInt(this.upvotes);
+        dest.writeInt(this.status);
         dest.writeDouble(this.xCoord);
         dest.writeDouble(this.yCoord);
     }
@@ -91,6 +95,9 @@ public class Request implements Parcelable {
 
     public int getUpvotes() { return this.upvotes; }
     public void setUpvotes(int upvotes) { this.upvotes = upvotes; }
+
+    public int getStatus() { return this.status; }
+    public void setStatus(int status) { this.status = status; }
 
     public double getXCoord() { return this.xCoord; }
     public void setXCoord(double xCoord) { this.xCoord = xCoord; }
