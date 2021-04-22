@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             List<Address> markerAddress = geo.getFromLocation(marker.getPosition().latitude,
                     marker.getPosition().longitude, 1);
-            selectionLocation = markerAddress.get(0).getAddressLine(0);
+            selectionLocation = markerAddress.get(0).getAddressLine(0).split(",", 2)[0];
         } catch (IOException e) {
             Log.d(DEBUG, "Could not find address");
         }

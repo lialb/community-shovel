@@ -94,7 +94,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         try {
             List<Address> requestAddress = geo.getFromLocation(this.curRequest.getXCoord(),
                     this.curRequest.getYCoord(), 1);
-            selectionLocation = requestAddress.get(0).getAddressLine(0);
+            selectionLocation = requestAddress.get(0).getAddressLine(0).split(",", 2)[0];
         } catch (IOException e) {
             Log.d(DEBUG, "Could not find address");
         }
