@@ -76,87 +76,99 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         addComment = (EditText) findViewById(R.id.comment_text);
 
         ArrayList<String> commentCheck = curRequest.getComments();
+        try {
+            JSONArray commentArr = new JSONArray(commentCheck.get(0));
 
-        if (commentCheck.isEmpty()) {
-            findViewById(R.id.Comment1).setVisibility(View.GONE);
-            findViewById(R.id.Comment2).setVisibility(View.GONE);
-            findViewById(R.id.Comment3).setVisibility(View.GONE);
-            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
-        }
-
-        if (commentCheck.size() == 1) {
-
-            findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
-            findViewById(R.id.Comment2).setVisibility(View.GONE);
-            findViewById(R.id.Comment3).setVisibility(View.GONE);
-            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
-
-            if (commentCheck.get(0) != null) {
-                try {
-                    JSONObject comm = new JSONObject(commentCheck.get(0));
-                    comment1.setText(comm.getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
-
+            if (commentArr.length() == 0 ) {
+                findViewById(R.id.Comment1).setVisibility(View.GONE);
+                findViewById(R.id.Comment2).setVisibility(View.GONE);
+                findViewById(R.id.Comment3).setVisibility(View.GONE);
+                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
             }
-        }
 
-        else if (commentCheck.size() == 2) {
-            findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
-            findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
-            findViewById(R.id.Comment3).setVisibility(View.GONE);
-            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+            if (commentArr.length() == 1) {
+
+                findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+                findViewById(R.id.Comment2).setVisibility(View.GONE);
+                findViewById(R.id.Comment3).setVisibility(View.GONE);
+                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+
+                if (!commentArr.isNull(0)) {
+                    try {
+//                    JSONArray commArr = new JSONArray(commentCheck.get(0));
+//                    JSONObject comm = new JSONObject(commentCheck.get(0));
+//                    comment1.setText(comm.getString("comment"));
+                        comment1.setText(commentArr.getJSONObject(0).getString("comment"));
+                    } catch (JSONException e) {
+                        Log.e("JSONObject Error", e.getMessage());
+                    }
+
+                }
+            }
+
+            else if (commentArr.length() == 2) {
+                findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+                findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
+                findViewById(R.id.Comment3).setVisibility(View.GONE);
+                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
 //            JSONArray comm = new JSONArray(commentCheck);
-            if (commentCheck.get(0) != null) {
-                try {
-                    JSONObject comm = new JSONObject(commentCheck.get(0));
-                    comment1.setText(comm.getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
+                if (!commentArr.isNull(0)) {
+                    try {
+//                    JSONObject comm = new JSONObject(commentCheck.get(0));
+                        comment1.setText(commentArr.getJSONObject(0).getString("comment"));
+                    } catch (JSONException e) {
+                        Log.e("JSONObject Error", e.getMessage());
+                    }
+                }
+                if (!commentArr.isNull(1)) {
+                    try {
+//                    JSONObject comm = new JSONObject(commentCheck.get(1));
+                        comment2.setText(commentArr.getJSONObject(1).getString("comment"));
+                    } catch (JSONException e) {
+                        Log.e("JSONObject Error", e.getMessage());
+                    }
                 }
             }
-            if (commentCheck.get(1) != null) {
-                try {
-                    JSONObject comm = new JSONObject(commentCheck.get(1));
-                    comment1.setText(comm.getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
+
+            else if (commentCheck.size() == 3) {
+                findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
+                findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
+                findViewById(R.id.Comment3).setVisibility(View.VISIBLE);
+                findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
+//            JSONArray comm = new JSONArray(commentCheck);
+                if (!commentArr.isNull(0)) {
+                    try {
+//                    JSONObject comm = new JSONObject(commentCheck.get(0));
+                        comment1.setText(commentArr.getJSONObject(0).getString("comment"));
+                    } catch (JSONException e) {
+                        Log.e("JSONObject Error", e.getMessage());
+                    }
+                }
+                if (!commentArr.isNull(1)) {
+                    try {
+//
+                        comment2.setText(commentArr.getJSONObject(1).getString("comment"));
+                    } catch (JSONException e) {
+                        Log.e("JSONObject Error", e.getMessage());
+                    }
+                }
+                if (!commentArr.isNull(2)) {
+                    try {
+//
+                        comment3.setText(commentArr.getJSONObject(2).getString("comment"));
+                    } catch (JSONException e) {
+                        Log.e("JSONObject Error", e.getMessage());
+                    }
                 }
             }
+
+        }  catch (JSONException e) {
+            Log.e("JSONObject Error", e.getMessage());
         }
 
-        else if (commentCheck.size() == 3) {
-            findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
-            findViewById(R.id.Comment2).setVisibility(View.VISIBLE);
-            findViewById(R.id.Comment3).setVisibility(View.VISIBLE);
-            findViewById(R.id.CommentCurrent).setVisibility(View.GONE);
-//            JSONArray comm = new JSONArray(commentCheck);
-            if (commentCheck.get(0) != null) {
-                try {
-                    JSONObject comm = new JSONObject(commentCheck.get(0));
-                    comment1.setText(comm.getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
-            }
-            if (commentCheck.get(1) != null) {
-                try {
-                    JSONObject comm = new JSONObject(commentCheck.get(1));
-                    comment1.setText(comm.getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
-            }
-            if (commentCheck.get(2) != null) {
-                try {
-                    JSONObject comm = new JSONObject(commentCheck.get(2));
-                    comment1.setText(comm.getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
-            }
-        }
+
+
+
 
 
     }
