@@ -19,13 +19,13 @@
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="40"/>
+            android:layout_weight="35"/>
         <!-- Volunteer Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:layout_weight="60">
+            android:layout_weight="65">
             <LinearLayout
                 android:id="@+id/selection"
                 android:layout_width="match_parent"
@@ -160,6 +160,43 @@
                             android:textColor="#000"
                             android:textSize="20sp" />
                     </LinearLayout>
+                    <!-- Volunteers -->
+                    <LinearLayout
+                        android:id="@+id/volunteer_volunteers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:layout_marginTop="-10dp"
+                            android:text="@string/volunteers_label"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:layout_gravity="top"/>
+                        <Button
+                            android:id="@+id/volunteer_view_volunteer_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="0dp"
+                            android:background="@android:color/transparent"
+                            android:paddingTop="-5dp"
+                            android:paddingBottom="-5dp"
+                            android:layout_marginTop="-10dp"
+                            android:layout_marginBottom="-10dp"
+                            android:textColor="#04f"
+                            android:textAllCaps="false"
+                            android:textSize="20sp"
+                            android:text="None"/>
+                    </LinearLayout>
+                    <!--
                     <Button
                         android:id="@+id/volunteer_view_comments_button"
                         android:layout_width="wrap_content"
@@ -170,6 +207,7 @@
                         android:textAllCaps="false"
                         android:textSize="20sp"
                         android:text="@string/view_comments_label" />
+                    -->
 
                 </LinearLayout>
                 <Button

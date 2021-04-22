@@ -29,10 +29,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 public class VolunteerPage extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
@@ -41,12 +43,13 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
     private static final String DATA = "We passed the bundle of data";
 
     private User activeUser;
+    private User selectedUser;
     private Request curRequest;
     private SupportMapFragment mapFragment;
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
-    private Button viewCommentsButton;
+    private Button viewVolunteerProfileButton;
     private Button stopVolunteeringButton;
     private Button markPartialButton;
     private Button markCompleteButton;
@@ -65,10 +68,11 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         activeUser = getIntent().getParcelableExtra("active_user");
         curRequest = getIntent().getParcelableExtra("cur_request");
 
+
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-        viewCommentsButton = (Button) findViewById(R.id.volunteer_view_comments_button);
+        viewVolunteerProfileButton = (Button) findViewById(R.id.volunteer_view_volunteer_button);
         upvoteButton = (ImageButton) findViewById(R.id.volunteer_upvote_button);
         stopVolunteeringButton = (Button) findViewById(R.id.stop_volunteer_button);
         markPartialButton = (Button) findViewById(R.id.mark_partial_button);
@@ -77,7 +81,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
-        viewCommentsButton.setOnClickListener(this);
+        viewVolunteerProfileButton.setOnClickListener(this);
         upvoteButton.setOnClickListener(this);
         stopVolunteeringButton.setOnClickListener(this);
         markPartialButton.setOnClickListener(this);
@@ -113,6 +117,10 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        this.addVolunteerToRequest();
+
+        this.getVolunteer();
     }
 
     public void onMapReady(GoogleMap map) {
@@ -176,12 +184,9 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
             switchActivity(CreateRequest.class);
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
-        } else if (v.getId() == R.id.volunteer_view_comments_button) {
-            Log.d(DEBUG, "Viewing comments for selection");
-            Intent intent = new Intent(getBaseContext(), CommentsPage.class);
-            intent.putExtra("cur_request", this.curRequest);
-            intent.putExtra("active_user", activeUser);
-            startActivity(intent);
+        } else if (v.getId() == R.id.volunteer_view_volunteer_button) {
+            Log.d(DEBUG, "Viewing volunteer profile");
+            viewVolunteerProfile();
         } else if (v.getId() == R.id.volunteer_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
@@ -200,6 +205,53 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
             completedVolunteer();
             Log.d(DEBUG, "Completed volunteering");
         }
+    }
+
+    public void getVolunteer() {
+        try {
+            JSONObject jsonObject = new JSONObject(this.curRequest.getVolunteers());
+            Iterator<String> keys = jsonObject.keys();
+            String volunteerId = keys.next();
+            Log.d(DEBUG, "volunteerId: " + volunteerId);
+            String url ="http://10.0.2.2:5000/get-user/" + volunteerId;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (com.android.volley.Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.d(DEBUG, response.toString());
+
+                                String firstName = response.getString("first_name");
+                                String lastName = response.getString("last_name");
+                                String bio = response.getString("bio");
+                                int distanceShoveled = response.getInt("distance_shoveled");
+                                int peopleImpacted = response.getInt("people_impacted");
+                                selectedUser = new User(volunteerId, firstName, lastName, bio,
+                                        distanceShoveled, peopleImpacted);
+                                viewVolunteerProfileButton.setText(selectedUser.getFirstName());
+                            } catch (JSONException e) {
+                                Log.e("JSON Exception", e.getMessage());
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
+                    });
+
+            VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+        } catch(JSONException e) {
+            Log.e("JSON Exception", e.getMessage());
+        }
+    }
+
+    public void viewVolunteerProfile() {
+        Intent intent = new Intent(getBaseContext(), Profile.class);
+        intent.putExtra("selected_user", selectedUser);
+        intent.putExtra("active_user", activeUser);
+        startActivity(intent);
     }
 
     public void upvoteSelection() {
@@ -232,6 +284,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
 
     public void stopVolunteer() {
         User u = this.activeUser;
+
         new AlertDialog.Builder(this)
                 .setTitle("Please Confirm")
                 .setMessage("Do you really want to stop volunteering?")
@@ -239,6 +292,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        removeVolunteerFromRequest();
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         intent.putExtra("active_user", u);
                         startActivity(intent);
@@ -248,6 +302,76 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
+    }
+
+    public void addVolunteerToRequest() {
+        String url;
+        // find request based on the provided key
+        try {
+            url = "http://10.0.2.2:5000/volunteer-for-request/" + this.curRequest.getRequestId();
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            return;
+        }
+
+        JSONObject request = new JSONObject();
+        try{
+            request.put("email", this.activeUser.getEmail());
+        }catch(JSONException e){
+            Log.e("JSONObject Error", e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.PUT, url, request, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(DEBUG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
+                    }
+                });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void removeVolunteerFromRequest() {
+        String url;
+        // find request based on the provided key
+        try {
+            url = "http://10.0.2.2:5000/remove-volunteer/" + this.curRequest.getRequestId();
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            return;
+        }
+
+        JSONObject request = new JSONObject();
+        try{
+            request.put("email", this.activeUser.getEmail());
+        }catch(JSONException e){
+            Log.e("JSONObject Error", e.getMessage());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.PUT, url, request, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(DEBUG, response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
+                    }
+                });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
     public void partialVolunteer() {
@@ -294,8 +418,6 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
 
     //Update the status of curMarker
     public void updateReqStatus(int status) {
-
-
         String url;
         // find request based on the provided key
         try {
@@ -326,8 +448,6 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
                         }
                     }
                 });
-
-
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }

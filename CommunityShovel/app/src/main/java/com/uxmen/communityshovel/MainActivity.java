@@ -54,8 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton createRequestButton;
     private ImageButton profileButton;
     private Button viewCommentsButton;
+    private Button viewVolunteerProfileButton;
     private Button volunteerButton;
     private ImageButton upvoteButton;
+    private User selectionVolunteer;
     private User activeUser;
     private HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
@@ -84,12 +86,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
         viewCommentsButton = (Button) findViewById(R.id.selection_view_comments_button);
+        viewVolunteerProfileButton = (Button) findViewById(R.id.selection_view_volunteer_button);
         volunteerButton = (Button) findViewById(R.id.selection_volunteer_button);
         upvoteButton = (ImageButton) findViewById(R.id.selection_upvote_button);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
+        viewVolunteerProfileButton.setOnClickListener(this);
         viewCommentsButton.setOnClickListener(this);
         volunteerButton.setOnClickListener(this);
         upvoteButton.setOnClickListener(this);
@@ -189,7 +193,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /** Called when the user clicks a marker. */
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        moveCameraToMarker(marker, 0.25);
+        moveCameraToMarker(marker, 0.30);
+        selectionVolunteer = null;
+        viewVolunteerProfileButton.setText(" ");
         showSelection(marker);
         // return true to override default marker click action
         return true;
@@ -200,7 +206,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (this.selectionVisible && this.curMarker != null) {
             int containerHeight = ((View) findViewById(R.id.map)).getHeight();
             Point pointScreenPos = this.map.getProjection().toScreenLocation(point);
-            if (pointScreenPos.y < containerHeight / 2) {
+            if (pointScreenPos.y < containerHeight * 0.4) {
+                selectionVolunteer = null;
+                viewVolunteerProfileButton.setText(" ");
                 hideSelection();
             }
         }
@@ -233,6 +241,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("requests.get Error", e.getMessage());
             return;
         }
+
+        getVolunteer(request);
+
         Log.d(DEBUG, request.getInfo());
         // populate selection overlay with request details
         TextView textViewSelectionLocation = (TextView) findViewById(R.id.selection_location_text);
@@ -286,6 +297,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.selectionVisible = false;
             moveCameraToMarker(this.curMarker, 0.0);
         }
+    }
+
+    public void getVolunteer(Request request) {
+        try {
+            JSONObject jsonObject = new JSONObject(request.getVolunteers());
+            Iterator<String> keys = jsonObject.keys();
+            if (keys.hasNext()) {
+                String volunteerId = keys.next();
+                Log.d(DEBUG, "volunteerId: " + volunteerId);
+                String url ="http://10.0.2.2:5000/get-user/" + volunteerId;
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (com.android.volley.Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    Log.d(DEBUG, response.toString());
+
+                                    String firstName = response.getString("first_name");
+                                    String lastName = response.getString("last_name");
+                                    String bio = response.getString("bio");
+                                    int distanceShoveled = response.getInt("distance_shoveled");
+                                    int peopleImpacted = response.getInt("people_impacted");
+                                    selectionVolunteer = new User(volunteerId, firstName, lastName, bio,
+                                            distanceShoveled, peopleImpacted);
+                                    viewVolunteerProfileButton.setText(selectionVolunteer.getFirstName());
+                                } catch (JSONException e) {
+                                    Log.e("JSON Exception", e.getMessage());
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                            }
+                        });
+
+                VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+            }
+        } catch(JSONException e) {
+            Log.e("JSON Exception", e.getMessage());
+        }
+    }
+
+    public void viewVolunteerProfile() {
+        Intent intent = new Intent(getBaseContext(), Profile.class);
+        intent.putExtra("selected_user", selectionVolunteer);
+        intent.putExtra("active_user", activeUser);
+        startActivity(intent);
     }
 
     protected void onSaveInstanceState(Bundle savedInstance) {
@@ -353,6 +412,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
             Request curRequest = requests.get((String)this.curMarker.getTag());
             curRequest.setUpvotes(curRequest.getUpvotes() + 1);
+        } else if (this.selectionVisible && v.getId() == R.id.selection_view_volunteer_button) {
+            Log.d(DEBUG, "Viewing volunteer profile");
+            viewVolunteerProfile();
         }
     }
 

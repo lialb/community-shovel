@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CommunityShovel"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Profile"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -54,17 +55,17 @@
         </activity>
         <activity android:name=".VolunteerPage">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.uxmen.communityshovel.CommentsPage">
+        <activity android:name=".CommentsPage">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.uxmen.communityshovel.CommentsPageUser">
+        <activity android:name=".CommentsPageUser">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
