@@ -32,6 +32,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private ImageButton profileButton;
     private User activeUser;
     private com.uxmen.communityshovel.Request curRequest;
+    private Button postComment;
     private EditText addComment;
     private TextView comment1;
     private TextView comment2;
@@ -53,11 +54,11 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-        Button postComment = (Button) findViewById(R.id.add_comment_button);
-        TextView comment1 = (TextView) findViewById(R.id.Comment1);
-        TextView comment2 = (TextView) findViewById(R.id.Comment2);
-        TextView comment3 = (TextView) findViewById(R.id.Comment3);
-        TextView commentCur = (TextView) findViewById(R.id.CommentCurrent);
+        this.postComment = (Button) findViewById(R.id.add_comment_button);
+        this.comment1 = (TextView) findViewById(R.id.Comment1);
+        this.comment2 = (TextView) findViewById(R.id.Comment2);
+        this.comment3 = (TextView) findViewById(R.id.Comment3);
+        this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
 
 
 
@@ -78,7 +79,12 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         if (commentCheck.size() == 1) {
             findViewById(R.id.Comment1).setVisibility(View.VISIBLE);
             if (commentCheck.get(0) != null) {
-                comment1.setText(commentCheck.get(0));
+                try {
+                    JSONObject comm = new JSONObject(commentCheck.get(0));
+                } catch (JSONException e) {
+
+                }
+                    comment1.setText(commentCheck.get(0));
             }
         }
 
@@ -140,8 +146,8 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
         findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
-        Log.d(DEBUG, addComment.getText().toString());
-        commentCur.setText(addComment.getText().toString());
+        Log.d(DEBUG, this.addComment.getText().toString());
+        this.commentCur.setText(this.addComment.getText().toString());
 
     }
 
