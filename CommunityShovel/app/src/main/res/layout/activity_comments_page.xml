@@ -23,8 +23,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/Comment1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Comment1"
+                    android:textColor="#333"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/Comment2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Comment2"
+                    android:textColor="#333"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/Comment3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Comment3"
+                    android:textColor="#333"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/CommentCurrent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="CommentCurrent"
+                    android:textColor="#333"
+                    android:textSize="25sp" />
 
                 <EditText
                     android:id="@+id/comment_text"
