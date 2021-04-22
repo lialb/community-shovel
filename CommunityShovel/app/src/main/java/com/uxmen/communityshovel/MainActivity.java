@@ -134,16 +134,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         String creatorId = request.getString("creator_id");
                                         String info = request.getString("info");
 
-                                        ArrayList<String> volunteers = new ArrayList<String>();
-                                        ArrayList<String> comments = new ArrayList<String>();
+                                        String volunteers = "";
+                                        String comments = "";
                                         // we want to catch cases with 0 volunteers or comments, and still add request to list
                                         try {
-                                            volunteers.add(request.getString("volunteers"));
+                                            volunteers = request.getString("volunteers");
                                         } catch (JSONException e) {
                                             Log.d(DEBUG, e.getMessage());
                                         }
                                         try {
-                                            comments.add(request.getString("comments"));
+                                            comments = request.getString("comments");
                                         } catch (JSONException e) {
                                             Log.d(DEBUG, e.getMessage());
                                         }

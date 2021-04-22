@@ -9,14 +9,14 @@ public class Request implements Parcelable {
     private String requestId;
     private String creatorId;
     private String info;
-    private ArrayList<String> volunteers;
-    private ArrayList<String> comments;
+    private String volunteers;
+    private String comments;
     private int time;
     private int upvotes;
     private double xCoord;
     private double yCoord;
 
-    public Request(String requestId, String creatorId, String info, ArrayList<String> volunteers, ArrayList<String> comments, int time, int upvotes, double xCoord, double yCoord) {
+    public Request(String requestId, String creatorId, String info, String volunteers, String comments, int time, int upvotes, double xCoord, double yCoord) {
         this.requestId = requestId;
         this.creatorId = creatorId;
         this.info = info;
@@ -32,8 +32,8 @@ public class Request implements Parcelable {
         this.requestId = source.readString();
         this.creatorId = source.readString();
         this.info = source.readString();
-        this.volunteers = source.createStringArrayList();
-        this.comments = source.createStringArrayList();
+        this.volunteers = source.readString();
+        this.comments = source.readString();
         this.time = source.readInt();
         this.upvotes = source.readInt();
         this.xCoord = source.readDouble();
@@ -50,8 +50,8 @@ public class Request implements Parcelable {
         dest.writeString(this.requestId);
         dest.writeString(this.creatorId);
         dest.writeString(this.info);
-        dest.writeStringList(this.volunteers);
-        dest.writeStringList(this.comments);
+        dest.writeString(this.volunteers);
+        dest.writeString(this.comments);
         dest.writeInt(this.time);
         dest.writeInt(this.upvotes);
         dest.writeDouble(this.xCoord);
@@ -80,11 +80,11 @@ public class Request implements Parcelable {
     public String getInfo() { return this.info; }
     public void setInfo(String info) { this.info = info; }
 
-    public ArrayList<String> getVolunteers() { return this.volunteers; }
-    public void setVolunteers(ArrayList<String> volunteers) { this.volunteers = volunteers; }
+    public String getVolunteers() { return this.volunteers; }
+    public void setVolunteers(String volunteers) { this.volunteers = volunteers; }
 
-    public ArrayList<String> getComments() { return this.comments; }
-    public void setComments(ArrayList<String> comments) { this.comments = comments; }
+    public String getComments() { return this.comments; }
+    public void setComments(String comments) { this.comments = comments; }
 
     public int getTime() { return this.time; }
     public void setTime(int time) { this.time = time; }
