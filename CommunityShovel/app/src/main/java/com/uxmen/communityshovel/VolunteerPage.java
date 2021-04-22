@@ -81,7 +81,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
-        viewVolunteerProfileButton.setOnClickListener(this);
+        //viewVolunteerProfileButton.setOnClickListener(this);
         upvoteButton.setOnClickListener(this);
         stopVolunteeringButton.setOnClickListener(this);
         markPartialButton.setOnClickListener(this);
@@ -120,7 +120,8 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
 
         this.addVolunteerToRequest();
 
-        this.getVolunteer();
+        //this.getVolunteer();
+        viewVolunteerProfileButton.setText(activeUser.getFirstName());
     }
 
     public void onMapReady(GoogleMap map) {
@@ -229,6 +230,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
                                 selectedUser = new User(volunteerId, firstName, lastName, bio,
                                         distanceShoveled, peopleImpacted);
                                 viewVolunteerProfileButton.setText(selectedUser.getFirstName());
+                                Log.d(DEBUG, "selectedUser bio: " + selectedUser.getBio());
                             } catch (JSONException e) {
                                 Log.e("JSON Exception", e.getMessage());
                             }
