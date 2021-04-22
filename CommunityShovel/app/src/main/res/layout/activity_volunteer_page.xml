@@ -56,7 +56,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingRight="10dp"
-                            android:text="Location"
+                            android:text="@string/location_label"
                             android:textColor="#000"
                             android:textStyle="bold"
                             android:textSize="20sp" />
@@ -129,6 +129,32 @@
                             android:textSize="20sp" />
                         <TextView
                             android:id="@+id/volunteer_info_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                    <!-- Status -->
+                    <LinearLayout
+                        android:id="@+id/volunteer_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="@string/status_label"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/volunteer_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#000"

@@ -86,6 +86,7 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         TextView textViewVolunteerLocation = (TextView) findViewById(R.id.volunteer_location_text);
         TextView textViewVolunteerUpvotes = (TextView) findViewById(R.id.volunteer_upvotes_text);
         TextView textViewVolunteerInfo = (TextView) findViewById(R.id.volunteer_info_text);
+        TextView textViewVolunteerStatus = (TextView) findViewById(R.id.volunteer_status_text);
 
         Context context = this;
         Geocoder geo = new Geocoder(context);
@@ -98,10 +99,17 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
             Log.d(DEBUG, "Could not find address");
         }
 
+        String statusText = "Incomplete";
+        if (curRequest.getStatus() == 1) {
+            statusText = "Partially complete";
+        } else if (curRequest.getStatus() == 2) {
+            statusText = "Complete";
+        }
+
         textViewVolunteerLocation.setText(selectionLocation);
         textViewVolunteerUpvotes.setText(String.valueOf(curRequest.getUpvotes()));
         textViewVolunteerInfo.setText(curRequest.getInfo());
-
+        textViewVolunteerStatus.setText(statusText);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
