@@ -134,16 +134,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         String creatorId = request.getString("creator_id");
                                         String info = request.getString("info");
 
-                                        ArrayList<String> volunteers = new ArrayList<String>();
-                                        ArrayList<String> comments = new ArrayList<String>();
+                                        String volunteers = "";
+                                        String comments = "";
                                         // we want to catch cases with 0 volunteers or comments, and still add request to list
                                         try {
-                                            volunteers.add(request.getString("volunteers"));
+                                            volunteers = request.getString("volunteers");
                                         } catch (JSONException e) {
                                             Log.d(DEBUG, e.getMessage());
                                         }
                                         try {
-                                            comments.add(request.getString("comments"));
+                                            comments = request.getString("comments");
                                         } catch (JSONException e) {
                                             Log.d(DEBUG, e.getMessage());
                                         }
@@ -323,6 +323,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switchActivity(YourProfile.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_comments_button) {
             Log.d(DEBUG, "Viewing comments for selection");
+            Intent intent = new Intent(getBaseContext(), CommentsPage.class);
+            Request r = requests.get((String)this.curMarker.getTag());
+            intent.putExtra("cur_request", r);
+            intent.putExtra("active_user", activeUser);
+            startActivity(intent);
+            //switchActivity(CommentsPage.class);
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
             Log.d(DEBUG, "Volunteering for selection");
             confirmVolunteer();

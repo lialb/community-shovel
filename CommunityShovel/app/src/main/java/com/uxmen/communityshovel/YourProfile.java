@@ -84,6 +84,7 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         } else if (v.getId() == R.id.your_profile_view_comments_button) {
             Toast.makeText(this, "View Profile Comments", Toast.LENGTH_SHORT).show();
             // TODO: switch to Hritik's View Comments activity
+            switchActivity(CommentsPageUser.class);
         }
     }
 
