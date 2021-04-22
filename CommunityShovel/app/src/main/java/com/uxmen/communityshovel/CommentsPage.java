@@ -43,14 +43,10 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Log.d(DEBUG, "onCreate()");
         setContentView(R.layout.activity_comments_page);
 
         activeUser = getIntent().getParcelableExtra("active_user");
-//        Log.d(DEBUG, "YourProfile: bio = " + activeUser.getBio());
-
         curRequest = getIntent().getParcelableExtra("cur_request");
-//        Log.d(DEBUG, "current requestId:" + curRequest.getRequestId());
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
@@ -113,7 +109,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private void postComment(View v) {
 
         String url ="http://10.0.2.2:5000/add-request-comment/" + curRequest.getRequestId().toString();
-//        String text =
         JSONObject request = new JSONObject();
         try{
             request.put("comment", addComment.getText().toString());
@@ -123,7 +118,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             Log.e("JSONObject Error", e.getMessage());
         }
 
-//        Log.d(DEBUG, request.toString());
+        Log.d(DEBUG, request.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, request, response -> {
@@ -156,7 +151,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             switchActivity(YourProfile.class);
         } else if (v.getId() == R.id.add_comment_button) {
             postComment(v);
-//            switchActivity(YourProfile.class);
         }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {

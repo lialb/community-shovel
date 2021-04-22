@@ -65,8 +65,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         this.comment3 = (TextView) findViewById(R.id.Comment3);
         this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
 
-
-
         this.comment1.setVisibility(View.GONE);
         this.comment2.setVisibility(View.GONE);
         this.comment3.setVisibility(View.GONE);
@@ -79,10 +77,8 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
 
         addComment = (EditText) findViewById(R.id.comment_text);
 
-
         String finalEmail = activeUser.getEmail().replace('.', ',');
         String url ="http://10.0.2.2:5000/get-user/" + finalEmail;
-//        SetTextBox(url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -90,8 +86,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                     public void onResponse(JSONObject response) {
                         try {
                             Log.d(DEBUG, response.toString());
-
-//                            String firstName = response.getString("first_name");
                             JSONArray commentArr = response.getJSONArray("comments");
 
                             if (commentArr.length() >= 1) {
@@ -136,9 +130,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
 
     }
 
-//    private void SetTextBox(String url) {
-//
-//    }
 
     // to post comment to requests, copied from EditProfile
     private void postCommentUser(View v) {
@@ -154,11 +145,11 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
             Log.e("JSONObject Error", e.getMessage());
         }
 
-//        Log.d(DEBUG, request.toString());
+        Log.d(DEBUG, request.toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, request, response -> {
-//                    Log.d(DEBUG, response.toString());
+                    Log.d(DEBUG, response.toString());
                 }, error -> {
                     if(error.networkResponse != null) {
                         Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
@@ -171,7 +162,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
 
         this.commentCur.setText(this.addComment.getText().toString());
         this.addComment.setText("");
-
     }
 
 
@@ -188,7 +178,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
             switchActivity(YourProfile.class);
         } else if (v.getId() == R.id.add_comment_button) {
             postCommentUser(v);
-//            switchActivity(YourProfile.class);
         }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
