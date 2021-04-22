@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HashMap<String, Request> requests = new HashMap<String, Request>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
-    private Boolean volunteerVisible = false;
     private Marker curMarker = null;
 
     @Override
@@ -97,9 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // hide selection initially
         findViewById(R.id.selection).setVisibility(View.INVISIBLE);
-
-        // hide volunteer initially
-        findViewById(R.id.volunteer).setVisibility(View.INVISIBLE);
     }
 
     public void onMapReady(GoogleMap map) {
@@ -283,150 +279,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void showVolunteer() {
-        // populate volunteer overlay with request details
-        TextView textViewVolunteerLocation = (TextView) findViewById(R.id.volunteer_location_text);
-        TextView textViewVolunteerInfo = (TextView) findViewById(R.id.volunteer_info_text);
-        TextView textViewSelectionLocation = (TextView) findViewById(R.id.selection_location_text);
-        TextView textViewSelectionInfo = (TextView) findViewById(R.id.selection_info_text);
-
-        /*
-        TextView textview= ((TextView) findViewById(R.id.youtextviewid));
-        String yourtext= textview.getText().toString();
-         */
-
-        String info_text= textViewSelectionInfo.getText().toString();
-        String location_text= textViewSelectionLocation.getText().toString();
-
-        textViewVolunteerLocation.setText(location_text);
-        textViewVolunteerInfo.setText(info_text);
-
-        // make volunteer overlay visible
-        if (!this.volunteerVisible) {
-            Animation slideUp = AnimationUtils.loadAnimation(this,
-                    R.anim.slide_up);
-            View selectionView = findViewById(R.id.volunteer);
-            selectionView.startAnimation(slideUp);
-            selectionView.setVisibility(View.VISIBLE);
-            this.volunteerVisible = true;
-        }
-    }
-
-    public void hideVolunteer() {
-        if (this.volunteerVisible) {
-            Animation slideDown = AnimationUtils.loadAnimation(this,
-                    R.anim.slide_down);
-            View volunteerView = findViewById(R.id.volunteer);
-            volunteerView.startAnimation(slideDown);
-            volunteerView.setVisibility(View.INVISIBLE);
-            this.volunteerVisible = false;
-            moveCameraToMarker(this.curMarker, 0.0);
-        }
-    }
-
-    public void stopVolunteer() {
-
-        new AlertDialog.Builder(this)
-                .setTitle("Please Confirm")
-                .setMessage("Do you really want to stop volunteering?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        updateReqStatus(0);
-                        hideVolunteer();
-                    }})
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
-
-    }
-
-    public void partialVolunteer() {
-        new AlertDialog.Builder(this)
-                .setTitle("Please Confirm")
-                .setMessage("Do you really want to stop volunteering and mark partially complete?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        updateReqStatus(1);
-                        hideVolunteer();
-                    }})
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
-    }
-
-    public void completedVolunteer() {
-        new AlertDialog.Builder(this)
-                .setTitle("Please Confirm")
-                .setMessage("Is the volunteer job completed?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        updateReqStatus(2);
-                        hideVolunteer();
-                    }})
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
-    }
-
-    //Update the status of curMarker
-    public void updateReqStatus(int status) {
-        Request request;
-        // find request based on the provided key
-        try {
-            request = requests.get((String)this.curMarker.getTag());
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            return;
-        }
-
-        String url;
-        // find request based on the provided key
-        try {
-            url = "http://10.0.2.2:5000/update-request/" + request.getRequestId();
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            return;
-        }
-
-        JSONObject body = new JSONObject();
-        try {
-            body.put("status", status);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (com.android.volley.Request.Method.PUT, url, body, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(DEBUG, response.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse != null) {
-                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
-                        }
-                    }
-                });
-
-
-
-        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-    }
-
     protected void onSaveInstanceState(Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         Log.d(DEBUG, "onSavedInstanceState()");
@@ -473,8 +325,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_comments_button) {
             Log.d(DEBUG, "Viewing comments for selection");
         } else if (this.selectionVisible && v.getId() == R.id.selection_volunteer_button) {
-            showVolunteer();
             Log.d(DEBUG, "Volunteering for selection");
+            Intent intent = new Intent(getBaseContext(), VolunteerPage.class);
+            Request r = requests.get((String)this.curMarker.getTag());
+            intent.putExtra("cur_request", r);
+            intent.putExtra("active_user", activeUser);
+            startActivity(intent);
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
             Log.d(DEBUG, "Upvoting selection");
             upvoteSelection();
@@ -482,17 +338,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
             Request curRequest = requests.get((String)this.curMarker.getTag());
             curRequest.setUpvotes(curRequest.getUpvotes() + 1);
-        }
-
-        else if (this.volunteerVisible && v.getId() == R.id.stop_volunteer_button) {
-            stopVolunteer();
-            Log.d(DEBUG, "Stopping volunteer");
-        } else if (this.volunteerVisible && v.getId() == R.id.partial_volunteer_button) {
-            partialVolunteer();
-            Log.d(DEBUG, "Partially completed volunteering");
-        } else if (this.volunteerVisible && v.getId() == R.id.complete_volunteer_button) {
-            completedVolunteer();
-            Log.d(DEBUG, "Completed volunteering");
         }
     }
 
