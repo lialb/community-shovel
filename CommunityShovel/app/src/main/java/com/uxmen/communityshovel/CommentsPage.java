@@ -23,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -39,12 +41,14 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
+    private User commentUser;
     private User activeUser;
     private com.uxmen.communityshovel.Request curRequest;
-    private Button postComment;
-    private EditText addComment;
-    private String CommentVal = "";
-    private boolean added = false;
+    private Button viewCommentProfileButton;
+//    private Button postComment;
+//    private EditText addComment;
+//    private String CommentVal = "";
+//    private boolean added = false;
     private LinearLayout ll;
 
     @Override
@@ -59,14 +63,18 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-        this.postComment = (Button) findViewById(R.id.add_comment_button);
+//        this.postComment = (Button) findViewById(R.id.add_comment_button);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
-        postComment.setOnClickListener(this);
+//        postComment.setOnClickListener(this);
 
-        addComment = (EditText) findViewById(R.id.comment_text);
+        viewCommentProfileButton = (Button) findViewById(R.id.visituser);
+
+        viewCommentProfileButton.setOnClickListener(this);
+
+//        addComment = (EditText) findViewById(R.id.comment_text);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         String commentCheck = curRequest.getComments();
@@ -85,13 +93,52 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
                 commentView.setText(commentArr.getJSONObject(i).getString("comment"));
                 commentView.setId(i);
                 // Name
-                TextView nameView = new TextView(this);
-                nameView.setText(commentArr.getJSONObject(i).getString("name") + ": ");
-                nameView.setTypeface(null, Typeface.BOLD);
-                nameView.setId(-i);
+//                TextView nameView = new TextView(this);
+//                nameView.setText(commentArr.getJSONObject(i).getString("name") + ": ");
+//                nameView.setTypeface(null, Typeface.BOLD);
+//                nameView.setId(-i);
+
+                Button btnTag = new Button(this);
+                btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                btnTag.setText(commentArr.getJSONObject(i).getString("name") + ": ");
+
+                String email = commentArr.getJSONObject(i).getString("user_id");
+                btnTag.setId(-i);
+
+
+
+                String url ="http://10.0.2.2:5000/get-user/" + email;
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (com.android.volley.Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    Log.d(DEBUG, response.toString());
+
+                                    String firstName = response.getString("first_name");
+                                    String lastName = response.getString("last_name");
+                                    String bio = response.getString("bio");
+                                    int distanceShoveled = response.getInt("distance_shoveled");
+                                    int peopleImpacted = response.getInt("people_impacted");
+                                    commentUser = new User(email, firstName, lastName, bio,
+                                            distanceShoveled, peopleImpacted);
+//
+//                                    viewCommentProfileButton.setText(commentUser.getFirstName());
+                                } catch (JSONException e) {
+                                    Log.e("JSON Exception", e.getMessage());
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                            }
+                        });
+
+                VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
                 // add view
-                templl.addView(nameView);
+                templl.addView(btnTag);
                 templl.addView(commentView);
 
                 // Draw box
@@ -149,7 +196,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
             VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
-            Log.d(DEBUG, this.addComment.getText().toString());
+//            Log.d(DEBUG, this.addComment.getText().toString());
         // refresh here
 
        addView(activeUser.getFirstName() + " " + activeUser.getLastName(), s);
@@ -158,8 +205,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
     private void addView(String nameData, String commentData) {
         String commentChecknew = curRequest.getComments();
-//        try {
-//            JSONArray commentArr = new JSONArray(commentChecknew);
+
             LinearLayout templlnew = new LinearLayout(this);
             templlnew.setOrientation(LinearLayout.HORIZONTAL);
             TextView latestComment = new TextView(this);
@@ -181,12 +227,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             templlnew.setBackground(gd);
             templlnew.setPadding(0, 10, 0, 10);
             this.ll.addView(templlnew);
-
-//        }
-//        catch (JSONException e) {
-//            Log.e("JSONObject Error", e.getMessage());
-//        }
-
     }
 
     public void showAlertDialogButtonClicked(View view) {
@@ -218,9 +258,9 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
 
 
-    public void viewVolunteerProfile() {
+    public void viewCommentProfile() {
         Intent intent = new Intent(getBaseContext(), Profile.class);
-        intent.putExtra("selected_user", selectionVolunteer);
+        intent.putExtra("selected_user", commentUser);
         intent.putExtra("active_user", activeUser);
         startActivity(intent);
     }
@@ -236,6 +276,8 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
+        } else if (v.getId() == R.id.visituser) {
+            viewCommentProfile();
         }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
