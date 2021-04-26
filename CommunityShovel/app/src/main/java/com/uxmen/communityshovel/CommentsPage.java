@@ -1,5 +1,7 @@
 package com.uxmen.communityshovel;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 
@@ -8,6 +10,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,10 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +43,9 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private com.uxmen.communityshovel.Request curRequest;
     private Button postComment;
     private EditText addComment;
+    private String CommentVal = "";
+    private boolean added = false;
+    private LinearLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +67,24 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         postComment.setOnClickListener(this);
 
         addComment = (EditText) findViewById(R.id.comment_text);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        LinearLayout ll = (LinearLayout) findViewById(R.id.comments_layout);
         String commentCheck = curRequest.getComments();
+        refresh(commentCheck);
+
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                showAlertDialogButtonClicked(view);
+
+            }
+        });
+    }
+
+    private void refresh(String commentCheck) {
+        LinearLayout ll = (LinearLayout) findViewById(R.id.comments_layout);
+
         try {
             JSONArray commentArr = new JSONArray(commentCheck);
             System.out.println(commentArr);
@@ -94,41 +117,74 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         } catch (JSONException e) {
             Log.e("JSONObject Error", e.getMessage());
         }
+
     }
 
     // to post comment to requests, copied from EditProfile
-    private void postComment(View v) {
+    private void postComment(View v, String s) {
 
-        String url ="http://10.0.2.2:5000/add-request-comment/" + curRequest.getRequestId().toString();
-        JSONObject request = new JSONObject();
-        try{
-            request.put("comment", addComment.getText().toString());
-            request.put("name", activeUser.getFirstName() + " " + activeUser.getLastName());
-            request.put("user_id", activeUser.getEmail());
-        }catch(JSONException e){
-            Log.e("JSONObject Error", e.getMessage());
-        }
+            String url ="http://10.0.2.2:5000/add-request-comment/" + curRequest.getRequestId().toString();
+            JSONObject request = new JSONObject();
+            try{
+                request.put("comment", s);
+                request.put("name", activeUser.getFirstName() + " " + activeUser.getLastName());
+                request.put("user_id", activeUser.getEmail());
+            }catch(JSONException e){
+                Log.e("JSONObject Error", e.getMessage());
+            }
 
-        Log.d(DEBUG, request.toString());
+            Log.d(DEBUG, request.toString());
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, request, response -> {
-                    Log.d(DEBUG, response.toString());
-                }, error -> {
-                    if(error.networkResponse != null) {
-                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
-                    }
-                    Toast.makeText(v.getContext(), "Invalid Comment", Toast.LENGTH_SHORT).show();
-                });
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, url, request, response -> {
+                        Log.d(DEBUG, response.toString());
+                    }, error -> {
+                        if(error.networkResponse != null) {
+                            Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
+                        }
+                        Toast.makeText(v.getContext(), "Invalid Comment", Toast.LENGTH_SHORT).show();
+                    });
 
-        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+            VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
-//        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
-        Log.d(DEBUG, this.addComment.getText().toString());
-//        this.commentCur.setText(this.addComment.getText().toString());
-        this.addComment.setText("");
+            Log.d(DEBUG, this.addComment.getText().toString());
+            String updated = curRequest.getComments();
+        // refresh here
+        this.ll.invalidate();
+        refresh(updated);
+
 
     }
+
+    public void showAlertDialogButtonClicked(View view) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add a comment");
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.activity_comment_modal, null);
+        builder.setView(customLayout);
+        // add a button
+        builder.setPositiveButton("Post Comment", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // send data from the AlertDialog to the Activity
+                EditText editText = customLayout.findViewById(R.id.editTextModal);
+                sendDialogDataToActivity(editText.getText().toString(), view);
+            }
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+    // do something with the data coming from the AlertDialog
+    private void sendDialogDataToActivity(String data, View v) {
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+        postComment(v, data);
+    }
+
+
+
 
 
 
@@ -140,8 +196,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
-        } else if (v.getId() == R.id.add_comment_button) {
-            postComment(v);
         }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
