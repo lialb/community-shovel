@@ -49,7 +49,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(DEBUG, "onCreate()");
-        setContentView(R.layout.activity_comments_page);
+        setContentView(R.layout.activity_comment_your_profile);
 
         activeUser = getIntent().getParcelableExtra("active_user");
         commentUser = getIntent().getParcelableExtra("selected_user");
@@ -63,7 +63,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         this.ll = (LinearLayout) findViewById(R.id.comments_layout);
 
@@ -94,14 +94,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                     }
                 });
 
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                showAlertDialogButtonClicked(view);
-
-            }
-        });
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
     }
@@ -175,58 +167,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
 
 
     // to post comment to requests, copied from EditProfile
-    private void postCommentUser(View v, String s) {
 
-        String finalEmail = activeUser.getEmail().replace('.', ',');
-        String url ="http://10.0.2.2:5000/add-user-comment/" + finalEmail;
-        JSONObject request = new JSONObject();
-        try{
-            request.put("comment", s);
-            request.put("name", activeUser.getFirstName() + " " + activeUser.getLastName());
-            request.put("user_id", activeUser.getEmail());
-        }catch(JSONException e){
-            Log.e("JSONObject Error", e.getMessage());
-        }
-
-        Log.d(DEBUG, request.toString());
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, request, response -> {
-                    Log.d(DEBUG, response.toString());
-                }, error -> {
-                    if(error.networkResponse != null) {
-                        Log.e("Error code", String.valueOf(error.networkResponse.statusCode));
-                    }
-                    Toast.makeText(v.getContext(), "Invalid Comment", Toast.LENGTH_SHORT).show();
-                });
-
-        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-        addView(activeUser.getFirstName() + " " + activeUser.getLastName(), s);
-    }
-
-    private void addView(String nameData, String commentData) {
-        LinearLayout templlnew = new LinearLayout(this);
-        templlnew.setOrientation(LinearLayout.HORIZONTAL);
-        TextView latestComment = new TextView(this);
-        latestComment.setText(commentData);
-        latestComment.setId(len);
-
-        TextView nameViewNew = new TextView(this);
-        nameViewNew.setText(nameData + ": ");
-        nameViewNew.setTypeface(null, Typeface.BOLD);
-        nameViewNew.setId(-len);
-
-        this.ll.addView(nameViewNew);
-        this.ll.addView(latestComment);
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(0xFFFFFFFF);
-        gd.setCornerRadius(5);
-        gd.setStroke(1, 0xFF000000);
-        templlnew.setBackground(gd);
-        templlnew.setPadding(0, 10, 0, 10);
-        this.ll.addView(templlnew);
-    }
 
     View.OnClickListener getOnClickDoSomething(final Button button, final String email, final String firstName, final String lastName, final String bio, final Integer distanceShoveled, Integer peopleImpacted)  {
         return new View.OnClickListener() {
@@ -238,32 +179,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     }
 
 
-    public void showAlertDialogButtonClicked(View view) {
-        // create an alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add a comment");
-        // set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.activity_comment_modal, null);
-        builder.setView(customLayout);
-        // add a button
-        builder.setPositiveButton("Post Comment", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // send data from the AlertDialog to the Activity
-                EditText editText = customLayout.findViewById(R.id.editTextModal);
-                sendDialogDataToActivity(editText.getText().toString(), view);
-            }
-        });
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-    // do something with the data coming from the AlertDialog
-    private void sendDialogDataToActivity(String data, View v) {
-        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-        postCommentUser(v, data);
-    }
 
 
     public void viewUserProfile() {
@@ -290,7 +205,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
         intent.putExtra("active_user", activeUser);
-//        intent.putExtra("selected_user", commentUser);
+        intent.putExtra("selected_user", commentUser);
         startActivity(intent);
     }
 }

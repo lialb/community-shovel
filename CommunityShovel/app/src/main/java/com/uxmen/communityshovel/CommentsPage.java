@@ -246,6 +246,13 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
                 sendDialogDataToActivity(editText.getText().toString(), view);
             }
         });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // send data from the AlertDialog to the Activity
+                dialog.dismiss();
+            }
+        });
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -280,7 +287,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
         intent.putExtra("active_user", activeUser);
-//        intent.putExtra("selected_user", commentUser);
+        intent.putExtra("selected_user", commentUser);
         startActivity(intent);
     }
 }

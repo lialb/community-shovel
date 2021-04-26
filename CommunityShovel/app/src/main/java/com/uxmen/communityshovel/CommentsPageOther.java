@@ -258,6 +258,14 @@ public class CommentsPageOther  extends AppCompatActivity implements View.OnClic
                 sendDialogDataToActivity(editText.getText().toString(), view);
             }
         });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // send data from the AlertDialog to the Activity
+                dialog.dismiss();
+            }
+        });
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
