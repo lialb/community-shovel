@@ -44,11 +44,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private User commentUser;
     private User activeUser;
     private com.uxmen.communityshovel.Request curRequest;
-    private Button viewCommentProfileButton;
-//    private Button postComment;
-//    private EditText addComment;
-//    private String CommentVal = "";
-//    private boolean added = false;
     private LinearLayout ll;
 
     @Override
@@ -63,18 +58,10 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-//        this.postComment = (Button) findViewById(R.id.add_comment_button);
-
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
-//        postComment.setOnClickListener(this);
 
-        viewCommentProfileButton = (Button) findViewById(R.id.visituser);
-
-        viewCommentProfileButton.setOnClickListener(this);
-
-//        addComment = (EditText) findViewById(R.id.comment_text);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         String commentCheck = curRequest.getComments();
@@ -122,8 +109,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
                                     int peopleImpacted = response.getInt("people_impacted");
                                     commentUser = new User(email, firstName, lastName, bio,
                                             distanceShoveled, peopleImpacted);
-//
-//                                    viewCommentProfileButton.setText(commentUser.getFirstName());
                                 } catch (JSONException e) {
                                     Log.e("JSON Exception", e.getMessage());
                                 }
@@ -167,8 +152,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
 
 
-
-
     // to post comment to requests, copied from EditProfile
     private void postComment(View v, String s) {
 
@@ -196,7 +179,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
             VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
-//            Log.d(DEBUG, this.addComment.getText().toString());
         // refresh here
 
        addView(activeUser.getFirstName() + " " + activeUser.getLastName(), s);
@@ -204,7 +186,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     }
 
     private void addView(String nameData, String commentData) {
-        String commentChecknew = curRequest.getComments();
+            String commentChecknew = curRequest.getComments();
 
             LinearLayout templlnew = new LinearLayout(this);
             templlnew.setOrientation(LinearLayout.HORIZONTAL);
@@ -276,9 +258,10 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Creating Request", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
-        } else if (v.getId() == R.id.visituser) {
-            viewCommentProfile();
         }
+//        else if (v.getId() == R.id.visituser) {
+//            viewCommentProfile();
+//        }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);

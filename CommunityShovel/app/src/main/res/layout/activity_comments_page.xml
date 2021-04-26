@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:gravity="top|center">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -14,96 +15,33 @@
         android:gravity="top|center"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:paddingLeft="20dp">
-
-            <LinearLayout
-                android:id="@+id/comments_layout"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:orientation="vertical"
-                android:paddingRight="10dp">
+                android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/visituser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="" />
-
-<!--                <TextView-->
-<!--                    android:id="@+id/Comment1"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:text="Comment1"-->
-<!--                    android:textColor="#333"-->
-<!--                    android:textSize="25sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/Comment2"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:text="Comment2"-->
-<!--                    android:textColor="#333"-->
-<!--                    android:textSize="25sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/Comment3"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:text="Comment3"-->
-<!--                    android:textColor="#333"-->
-<!--                    android:textSize="25sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/CommentCurrent"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:text="CommentCurrent"-->
-<!--                    android:textColor="#333"-->
-<!--                    android:textSize="25sp" />-->
-
-                <EditText
-                    android:id="@+id/comment_text"
+                <LinearLayout
+                    android:id="@+id/comments_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333" />
+                    android:gravity="left"
+                    android:orientation="vertical"
+                    android:paddingRight="10dp">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:layout_margin="16dp"
+                        android:contentDescription="string/submit"
+                        android:src="@drawable/ic_profile_comment"
+                        app:rippleColor="#FFFFFF" />
 
 
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:contentDescription="string/submit"
-            android:src="@drawable/ic_profile_comment"
-            app:rippleColor="#FFFFFF" />
-
-
+                </LinearLayout>
+            </ScrollView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/add_comment_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Post Comment" />
 
 
     <!-- Nav Bar -->
