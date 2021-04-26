@@ -85,13 +85,14 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 //                nameView.setTypeface(null, Typeface.BOLD);
 //                nameView.setId(-i);
 
+
+
+                String email = commentArr.getJSONObject(i).getString("user_id");
+
                 Button btnTag = new Button(this);
                 btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 btnTag.setText(commentArr.getJSONObject(i).getString("name") + ": ");
-
-                String email = commentArr.getJSONObject(i).getString("user_id");
                 btnTag.setId(-i);
-
 
 
                 String url ="http://10.0.2.2:5000/get-user/" + email;
@@ -107,8 +108,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
                                     String bio = response.getString("bio");
                                     int distanceShoveled = response.getInt("distance_shoveled");
                                     int peopleImpacted = response.getInt("people_impacted");
-                                    commentUser = new User(email, firstName, lastName, bio,
-                                            distanceShoveled, peopleImpacted);
+                                    btnTag.setOnClickListener(getOnClickDoSomething(btnTag, email, firstName, lastName, bio, distanceShoveled, peopleImpacted));
                                 } catch (JSONException e) {
                                     Log.e("JSON Exception", e.getMessage());
                                 }
@@ -120,7 +120,12 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
                             }
                         });
 
+
+
                 VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+
+
 
                 // add view
                 templl.addView(btnTag);
@@ -147,6 +152,15 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
             }
         });
+    }
+
+    View.OnClickListener getOnClickDoSomething(final Button button, final String email, final String firstName, final String lastName, final String bio, final Integer distanceShoveled, Integer peopleImpacted)  {
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                commentUser = new User(email, firstName, lastName, bio, distanceShoveled, peopleImpacted);
+                viewCommentProfile();
+            }
+        };
     }
 
 
@@ -248,8 +262,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
     public void onClick(View v) {
         if (v.getId() == R.id.home_button) {
             Toast.makeText(this, "Going Home", Toast.LENGTH_SHORT).show();
@@ -259,9 +271,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
         }
-//        else if (v.getId() == R.id.visituser) {
-//            viewCommentProfile();
-//        }
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);

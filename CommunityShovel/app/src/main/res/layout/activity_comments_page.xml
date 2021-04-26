@@ -25,7 +25,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:orientation="vertical"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:background="?android:attr/selectableItemBackground">
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fab"

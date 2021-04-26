@@ -39,9 +39,9 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
+    private User commentUser;
     private User activeUser;
     private com.uxmen.communityshovel.Request curRequest;
-    private User commentUser;
     private Integer len;
     private LinearLayout ll;
 
@@ -134,8 +134,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                                         String bio = response.getString("bio");
                                         int distanceShoveled = response.getInt("distance_shoveled");
                                         int peopleImpacted = response.getInt("people_impacted");
-                                        commentUser = new User(email, firstName, lastName, bio,
-                                                distanceShoveled, peopleImpacted);
+                                        btnTag.setOnClickListener(getOnClickDoSomething(btnTag, email, firstName, lastName, bio, distanceShoveled, peopleImpacted));
                                     } catch (JSONException e) {
                                         Log.e("JSON Exception", e.getMessage());
                                     }
@@ -228,6 +227,15 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         this.ll.addView(templlnew);
     }
 
+    View.OnClickListener getOnClickDoSomething(final Button button, final String email, final String firstName, final String lastName, final String bio, final Integer distanceShoveled, Integer peopleImpacted)  {
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                commentUser = new User(email, firstName, lastName, bio, distanceShoveled, peopleImpacted);
+                viewUserProfile();
+            }
+        };
+    }
+
 
     public void showAlertDialogButtonClicked(View view) {
         // create an alert builder
@@ -257,6 +265,12 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     }
 
 
+    public void viewUserProfile() {
+        Intent intent = new Intent(getBaseContext(), Profile.class);
+        intent.putExtra("selected_user", commentUser);
+        intent.putExtra("active_user", activeUser);
+        startActivity(intent);
+    }
 
 
     public void onClick(View v) {
@@ -268,8 +282,13 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
         }
-
+//        else if (v.getId() == R.id.comments_layout) {
+//            viewUserProfile();
+//        }
     }
+
+
+
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
         intent.putExtra("active_user", activeUser);
