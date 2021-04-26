@@ -70,20 +70,9 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         String commentCheck = curRequest.getComments();
-        refresh(commentCheck);
+//        refresh(commentCheck);
 
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                showAlertDialogButtonClicked(view);
-
-            }
-        });
-    }
-
-    private void refresh(String commentCheck) {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.comments_layout);
+        this.ll = (LinearLayout) findViewById(R.id.comments_layout);
 
         try {
             JSONArray commentArr = new JSONArray(commentCheck);
@@ -118,7 +107,20 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             Log.e("JSONObject Error", e.getMessage());
         }
 
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                showAlertDialogButtonClicked(view);
+
+            }
+        });
     }
+
+
+
+
+
 
     // to post comment to requests, copied from EditProfile
     private void postComment(View v, String s) {
@@ -148,11 +150,42 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
             Log.d(DEBUG, this.addComment.getText().toString());
-            String updated = curRequest.getComments();
         // refresh here
-        this.ll.invalidate();
-        refresh(updated);
 
+       addView(activeUser.getFirstName() + " " + activeUser.getLastName(), s);
+
+    }
+
+    private void addView(String nameData, String commentData) {
+        String commentChecknew = curRequest.getComments();
+//        try {
+//            JSONArray commentArr = new JSONArray(commentChecknew);
+            LinearLayout templlnew = new LinearLayout(this);
+            templlnew.setOrientation(LinearLayout.HORIZONTAL);
+            TextView latestComment = new TextView(this);
+            latestComment.setText(commentData);
+            latestComment.setId(commentChecknew.length());
+
+            TextView nameViewNew = new TextView(this);
+            nameViewNew.setText(nameData + ": ");
+            nameViewNew.setTypeface(null, Typeface.BOLD);
+            nameViewNew.setId(-(commentChecknew.length()));
+
+            this.ll.addView(nameViewNew);
+            this.ll.addView(latestComment);
+
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(0xFFFFFFFF);
+            gd.setCornerRadius(5);
+            gd.setStroke(1, 0xFF000000);
+            templlnew.setBackground(gd);
+            templlnew.setPadding(0, 10, 0, 10);
+            this.ll.addView(templlnew);
+
+//        }
+//        catch (JSONException e) {
+//            Log.e("JSONObject Error", e.getMessage());
+//        }
 
     }
 
@@ -184,6 +217,13 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     }
 
 
+
+    public void viewVolunteerProfile() {
+        Intent intent = new Intent(getBaseContext(), Profile.class);
+        intent.putExtra("selected_user", selectionVolunteer);
+        intent.putExtra("active_user", activeUser);
+        startActivity(intent);
+    }
 
 
 
