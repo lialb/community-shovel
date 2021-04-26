@@ -54,6 +54,11 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         // get data for body
         activeUser = getIntent().getParcelableExtra("active_user");
         curRequest = getIntent().getParcelableExtra("cur_request");
+        commentUser = getIntent().getParcelableExtra("selected_user");
+
+//        if (commentUser != null) {
+//            activeUser = commentUser;
+//        }
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
@@ -275,6 +280,7 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
         intent.putExtra("active_user", activeUser);
+//        intent.putExtra("selected_user", commentUser);
         startActivity(intent);
     }
 }
