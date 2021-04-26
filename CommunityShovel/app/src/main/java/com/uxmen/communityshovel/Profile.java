@@ -67,7 +67,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         } else if (v.getId() == R.id.profile_view_comments_button) {
             Toast.makeText(this, "View Profile Comments", Toast.LENGTH_SHORT).show();
             // TODO: switch to Hritik's View Comments activity
-            switchActivity(CommentsPageUser.class);
+            switchActivity(CommentsPageOther.class);
         }
     }
 
@@ -94,6 +94,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
         intent.putExtra("active_user", activeUser);
+        intent.putExtra("selected_user", selectedUser);
         startActivity(intent);
         this.overridePendingTransition(0, 0);
     }
