@@ -4,12 +4,15 @@ import android.content.Intent;
 
 
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,16 +38,13 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
     private com.uxmen.communityshovel.Request curRequest;
     private Button postComment;
     private EditText addComment;
-    private TextView comment1;
-    private TextView comment2;
-    private TextView comment3;
-    private TextView commentCur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments_page);
 
+        // get data for body
         activeUser = getIntent().getParcelableExtra("active_user");
         curRequest = getIntent().getParcelableExtra("cur_request");
 
@@ -52,16 +52,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
         this.postComment = (Button) findViewById(R.id.add_comment_button);
-        this.comment1 = (TextView) findViewById(R.id.Comment1);
-        this.comment2 = (TextView) findViewById(R.id.Comment2);
-        this.comment3 = (TextView) findViewById(R.id.Comment3);
-        this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
-
-
-        this.comment1.setVisibility(View.GONE);
-        this.comment2.setVisibility(View.GONE);
-        this.comment3.setVisibility(View.GONE);
-        this.commentCur.setVisibility(View.GONE);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
@@ -70,37 +60,38 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
         addComment = (EditText) findViewById(R.id.comment_text);
 
+        LinearLayout ll = (LinearLayout) findViewById(R.id.comments_layout);
         String commentCheck = curRequest.getComments();
         try {
             JSONArray commentArr = new JSONArray(commentCheck);
+            System.out.println(commentArr);
+            for (int i = 0; i < commentArr.length(); ++i) {
+                LinearLayout templl = new LinearLayout(this);
+                templl.setOrientation(LinearLayout.HORIZONTAL);
+                // Comment:
+                TextView commentView = new TextView(this);
+                commentView.setText(commentArr.getJSONObject(i).getString("comment"));
+                commentView.setId(i);
+                // Name
+                TextView nameView = new TextView(this);
+                nameView.setText(commentArr.getJSONObject(i).getString("name") + ": ");
+                nameView.setTypeface(null, Typeface.BOLD);
+                nameView.setId(-i);
 
-            if (commentArr.length() >= 1) {
-                this.comment1.setVisibility(View.VISIBLE);
-                try {
-                    this.comment1.setText(commentArr.getJSONObject(0).getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
-            }
+                // add view
+                templl.addView(nameView);
+                templl.addView(commentView);
 
-            if (commentArr.length() >= 2) {
-                this.comment2.setVisibility(View.VISIBLE);
-                try {
-                    this.comment2.setText(commentArr.getJSONObject(1).getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
+                // Draw box
+                GradientDrawable gd = new GradientDrawable();
+                gd.setColor(0xFFFFFFFF);
+                gd.setCornerRadius(5);
+                gd.setStroke(1, 0xFF000000);
+                templl.setBackground(gd);
+                templl.setPadding(0, 10, 0, 0);
+                ll.addView(templl);
             }
-
-            if (commentArr.length() >= 3) {
-                this.comment3.setVisibility(View.VISIBLE);
-                try {
-                    this.comment3.setText(commentArr.getJSONObject(2).getString("comment"));
-                } catch (JSONException e) {
-                    Log.e("JSONObject Error", e.getMessage());
-                }
-            }
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             Log.e("JSONObject Error", e.getMessage());
         }
     }
@@ -132,9 +123,9 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
-        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
+//        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
         Log.d(DEBUG, this.addComment.getText().toString());
-        this.commentCur.setText(this.addComment.getText().toString());
+//        this.commentCur.setText(this.addComment.getText().toString());
         this.addComment.setText("");
 
     }

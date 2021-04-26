@@ -60,10 +60,10 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
         this.postComment = (Button) findViewById(R.id.add_comment_button);
-        this.comment1 = (TextView) findViewById(R.id.Comment1);
-        this.comment2 = (TextView) findViewById(R.id.Comment2);
-        this.comment3 = (TextView) findViewById(R.id.Comment3);
-        this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
+//        this.comment1 = (TextView) findViewById(R.id.Comment1);
+//        this.comment2 = (TextView) findViewById(R.id.Comment2);
+//        this.comment3 = (TextView) findViewById(R.id.Comment3);
+//        this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
 
         this.comment1.setVisibility(View.GONE);
         this.comment2.setVisibility(View.GONE);
@@ -157,7 +157,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                     Toast.makeText(v.getContext(), "Invalid Comment", Toast.LENGTH_SHORT).show();
                 });
 
-        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
+//        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
         this.commentCur.setText(this.addComment.getText().toString());
