@@ -42,12 +42,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
     private User activeUser;
     private com.uxmen.communityshovel.Request curRequest;
     private User commentUser;
-//    private Button postComment;
-//    private EditText addComment;
-//    private TextView comment1;
-//    private TextView comment2;
-//    private TextView comment3;
-//    private TextView commentCur;
     private Integer len;
     private LinearLayout ll;
 
@@ -63,7 +57,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-//        Button postComment = (Button) findViewById(R.id.add_comment_button);
 
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
@@ -72,23 +65,10 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         this.ll = (LinearLayout) findViewById(R.id.comments_layout);
-//        this.postComment = (Button) findViewById(R.id.add_comment_button);
-//        this.comment1 = (TextView) findViewById(R.id.Comment1);
-//        this.comment2 = (TextView) findViewById(R.id.Comment2);
-//        this.comment3 = (TextView) findViewById(R.id.Comment3);
-//        this.commentCur = (TextView) findViewById(R.id.CommentCurrent);
-
-//        this.comment1.setVisibility(View.GONE);
-//        this.comment2.setVisibility(View.GONE);
-//        this.comment3.setVisibility(View.GONE);
-//        this.commentCur.setVisibility(View.GONE);
 
         homeButton.setOnClickListener(this);
         createRequestButton.setOnClickListener(this);
         profileButton.setOnClickListener(this);
-//        postComment.setOnClickListener(this);
-
-//        addComment = (EditText) findViewById(R.id.comment_text);
 
         String finalEmail = activeUser.getEmail().replace('.', ',');
         String url ="http://10.0.2.2:5000/get-user/" + finalEmail;
@@ -171,7 +151,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                 }
 
 
-
                 // Name
 //                TextView nameView = new TextView(this);
 //                nameView.setText(commentArr.getJSONObject(i).getString("name") + ": ");
@@ -221,17 +200,11 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
                     Toast.makeText(v.getContext(), "Invalid Comment", Toast.LENGTH_SHORT).show();
                 });
 
-//        findViewById(R.id.CommentCurrent).setVisibility(View.VISIBLE);
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
-
-//        this.commentCur.setText(this.addComment.getText().toString());
-//        this.addComment.setText("");
         addView(activeUser.getFirstName() + " " + activeUser.getLastName(), s);
     }
 
     private void addView(String nameData, String commentData) {
-//        String commentChecknew = curRequest.getComments();
-//
         LinearLayout templlnew = new LinearLayout(this);
         templlnew.setOrientation(LinearLayout.HORIZONTAL);
         TextView latestComment = new TextView(this);
@@ -253,9 +226,6 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         templlnew.setBackground(gd);
         templlnew.setPadding(0, 10, 0, 10);
         this.ll.addView(templlnew);
-
-
-
     }
 
 
@@ -298,9 +268,7 @@ public class CommentsPageUser  extends AppCompatActivity implements View.OnClick
         } else if (v.getId() == R.id.profile_button) {
             switchActivity(YourProfile.class);
         }
-//        else if (v.getId() == R.id.add_comment_button) {
-//            postCommentUser(v);
-//        }
+
     }
     public void switchActivity(final Class<? extends AppCompatActivity> activity) {
         Intent intent = new Intent(this, activity);
