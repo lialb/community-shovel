@@ -73,46 +73,6 @@
                             android:textSize="20sp" />
 
                     </LinearLayout>
-                    <!-- Upvotes -->
-                    <LinearLayout
-                        android:id="@+id/selection_upvotes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:orientation="horizontal"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="12dp"
-                        android:paddingRight="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:paddingRight="10dp"
-                            android:text="@string/upvotes_label"
-                            android:textColor="#000"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-                        <TextView
-                            android:id="@+id/selection_upvotes_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:textColor="#000"
-                            android:textSize="20sp" />
-                        <ImageButton
-                            android:id="@+id/selection_upvote_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="20dp"
-                            android:src="@drawable/ic_upvote"
-                            android:contentDescription="@string/desc"
-                            android:background="@android:color/transparent"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerInside"/>
-
-                    </LinearLayout>
                     <!-- Info -->
                     <LinearLayout
                         android:id="@+id/selection_info"
@@ -199,16 +159,56 @@
                             android:textSize="20sp"
                             android:text="None"/>
                     </LinearLayout>
-                    <Button
-                        android:id="@+id/selection_view_comments_button"
-                        android:layout_width="wrap_content"
+                    <!-- Upvotes -->
+                    <RelativeLayout
+                        android:id="@+id/selection_upvotes"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
-                        android:background="@android:color/transparent"
-                        android:textColor="#04f"
-                        android:textAllCaps="false"
-                        android:textSize="20sp"
-                        android:text="@string/view_comments_label" />
+                        android:layout_marginTop="12dp">
+
+                        <TextView
+                            android:id="@+id/selection_upvotes_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textColor="#000"
+                            android:textSize="24sp"
+                            android:layout_alignParentLeft="true"/>
+                        <ImageButton
+                            android:id="@+id/selection_upvote_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_toRightOf="@id/selection_upvotes_text"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_upvote"
+                            android:contentDescription="@string/desc"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerInside"
+                            android:background="@android:color/transparent" />
+
+                        <!-- view comments -->
+                        <ImageButton
+                            android:id="@+id/selection_view_comments_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toRightOf="@id/selection_upvote_button"
+
+                            android:background="@android:color/transparent"
+                            android:textColor="#04f"
+                            android:textAllCaps="false"
+                            android:textSize="20sp"
+                            android:src="@drawable/ic_view_comments" />
+                    </RelativeLayout>
+
+
 
                 </LinearLayout>
                 <Button

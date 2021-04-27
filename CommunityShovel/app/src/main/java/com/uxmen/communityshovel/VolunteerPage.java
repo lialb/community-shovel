@@ -104,11 +104,15 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         }
 
         String statusText = "Incomplete";
+        textViewVolunteerStatus.setTextColor(this.getResources().getColor(R.color.incomplete));
         if (curRequest.getStatus() == 1) {
             statusText = "Partially complete";
+            textViewVolunteerStatus.setTextColor(this.getResources().getColor(R.color.partially_complete));
         } else if (curRequest.getStatus() == 2) {
             statusText = "Complete";
+            textViewVolunteerStatus.setTextColor(this.getResources().getColor(R.color.complete));
         }
+
 
         textViewVolunteerLocation.setText(selectionLocation);
         textViewVolunteerUpvotes.setText(String.valueOf(curRequest.getUpvotes()));
