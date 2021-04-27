@@ -129,9 +129,6 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
 
                 VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
-
-
-
                 // add view
                 templl.addView(btnTag);
                 templl.addView(commentView);
@@ -213,12 +210,14 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             latestComment.setText(commentData);
             latestComment.setId(commentChecknew.length());
 
-            TextView nameViewNew = new TextView(this);
-            nameViewNew.setText(nameData + ": ");
-            nameViewNew.setTypeface(null, Typeface.BOLD);
-            nameViewNew.setId(-(commentChecknew.length()));
 
-            this.ll.addView(nameViewNew);
+            Button btnTag = new Button(this);
+            btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            btnTag.setText(nameData + ": ");
+            btnTag.setId(-(commentChecknew.length()));
+
+
+            this.ll.addView(btnTag);
             this.ll.addView(latestComment);
 
             GradientDrawable gd = new GradientDrawable();

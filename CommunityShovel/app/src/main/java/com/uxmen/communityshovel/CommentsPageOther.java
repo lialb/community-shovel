@@ -153,13 +153,7 @@ public class CommentsPageOther  extends AppCompatActivity implements View.OnClic
             } catch (JSONException e) {
                 Log.e("JSONObject Error", e.getMessage());
             }
-
-
-            // Name
-//                TextView nameView = new TextView(this);
-//                nameView.setText(commentArr.getJSONObject(i).getString("name") + ": ");
-//                nameView.setTypeface(null, Typeface.BOLD);
-//                nameView.setId(-i);
+            
 
             // add view
             templl.addView(btnTag);
@@ -215,12 +209,12 @@ public class CommentsPageOther  extends AppCompatActivity implements View.OnClic
         latestComment.setText(commentData);
         latestComment.setId(len);
 
-        TextView nameViewNew = new TextView(this);
-        nameViewNew.setText(nameData + ": ");
-        nameViewNew.setTypeface(null, Typeface.BOLD);
-        nameViewNew.setId(-len);
+        Button btnTag = new Button(this);
+        btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        btnTag.setText(nameData + ": ");
+        btnTag.setId(-len);
 
-        this.ll.addView(nameViewNew);
+        this.ll.addView(btnTag);
         this.ll.addView(latestComment);
 
         GradientDrawable gd = new GradientDrawable();
