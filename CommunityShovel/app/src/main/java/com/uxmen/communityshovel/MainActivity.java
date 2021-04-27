@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         Marker marker = map.addMarker(new MarkerOptions()
                                                 .position(loc)
                                                 .title("Request")
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
+                                                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker",95,127))));
                                         marker.setTag(key);
                                     } catch (JSONException e) {
                                         Log.e("JSON Exception", e.getMessage());
@@ -188,6 +190,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     /** Called when the user clicks a marker. */
