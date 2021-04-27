@@ -75,15 +75,13 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
      * fillUserInfo populates the textViews on the Profile page with the user's data
      */
     public void fillUserInfo() {
-        TextView textViewFirstName = (TextView) findViewById(R.id.profile_first_name_text);
-        TextView textViewLastName = (TextView) findViewById(R.id.profile_last_name_text);
+        TextView textViewName = (TextView) findViewById(R.id.profile_name_text);
         TextView textViewEmail = (TextView) findViewById(R.id.profile_email_text);
         TextView textViewDistanceShoveled = (TextView) findViewById(R.id.profile_distance_shoveled_text);
         TextView textViewPeopleImpacted = (TextView) findViewById(R.id.profile_people_impacted_text);
         TextView textViewBio = (TextView) findViewById(R.id.profile_bio_text);
 
-        textViewFirstName.setText(selectedUser.getFirstName());
-        textViewLastName.setText(selectedUser.getLastName());
+        textViewName.setText(selectedUser.getFirstName() + " " + selectedUser.getLastName());
         textViewEmail.setText(selectedUser.getEmail().replace(',','.'));
         textViewDistanceShoveled.setText(selectedUser.getDistanceShoveled()+"");
         textViewPeopleImpacted.setText(selectedUser.getPeopleImpacted()+"");
