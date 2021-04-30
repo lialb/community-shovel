@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -139,11 +141,17 @@ public class VolunteerPage extends AppCompatActivity implements View.OnClickList
         // add marker for request
         this.curMarker = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .title("Request")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
+                .title("Request"));
+        curMarker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker_highlighted",114,152)));
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
         // Set a listener for marker click.
+    }
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     protected void onSaveInstanceState(Bundle savedInstance) {

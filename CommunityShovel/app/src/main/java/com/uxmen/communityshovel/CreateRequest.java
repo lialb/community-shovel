@@ -178,8 +178,8 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         mapMarker.remove();
         mapMarker = map.addMarker(new MarkerOptions()
                 .position(point)
-                .title("Marker")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
+                .title("Marker"));
+        mapMarker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker_highlighted",114,152)));
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 14));
 
