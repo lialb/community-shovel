@@ -214,8 +214,8 @@ public class CommentsPageOther  extends AppCompatActivity implements View.OnClic
         btnTag.setText(nameData + ": ");
         btnTag.setId(-len);
 
-        this.ll.addView(btnTag);
-        this.ll.addView(latestComment);
+        templlnew.addView(btnTag);
+        templlnew.addView(latestComment);
 
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(0xFFFFFFFF);

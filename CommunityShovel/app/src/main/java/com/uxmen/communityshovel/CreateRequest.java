@@ -1,6 +1,8 @@
 package com.uxmen.communityshovel;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -93,8 +95,8 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         final LatLng curLocation = new LatLng(40.1164, -88.2434);
         mapMarker = map.addMarker(new MarkerOptions()
                 .position(curLocation)
-                .title("Marker")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
+                .title("Marker"));
+        mapMarker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker_highlighted",114,152)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, 14));
         // Set a listener for map click.
         map.setOnMapClickListener(this);
@@ -111,6 +113,12 @@ public class CreateRequest extends AppCompatActivity implements GoogleMap.OnMapC
         }
 
 
+    }
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     // This method was changed to push the new request and return to the MainActivity map
