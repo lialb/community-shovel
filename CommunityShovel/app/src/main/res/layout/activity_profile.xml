@@ -4,33 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="top|center">
+    android:gravity="top|center"
+    android:weightSum="100">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="88"
+        android:layout_weight="90"
         android:orientation="vertical"
         android:gravity="top|center">
 
-        // "Your Profile"
-        <TextView
-            android:id="@+id/profile_title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textSize="25sp"
-            android:textColor="#333"
-            android:text="Profile"/>
+
 
         // Profile picture
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="30dp"
-            android:src="@drawable/ic_profile"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_profile_dark"
             android:contentDescription="@string/desc"
             android:background="@android:color/transparent"/>
+        // "Your Profile"
+        <TextView
+            android:id="@+id/profile_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:textSize="25sp"
+            android:textColor="#333"
+            android:text="Profile"/>
 
         // Personal Information
         <RelativeLayout
@@ -51,12 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/first_name_label"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/last_name_label"/>
+                    android:text="@string/name_label"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,13 +85,7 @@
                 android:gravity="left">
 
                 <TextView
-                    android:id="@+id/profile_first_name_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="#333"/>
-                <TextView
-                    android:id="@+id/profile_last_name_text"
+                    android:id="@+id/profile_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -128,58 +119,13 @@
         <Button
             android:id="@+id/profile_view_comments_button"
             android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:background="@android:color/transparent"
-            android:textColor="#04f"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:text="@string/profile_view_comments_label" />
+            android:text="@string/profile_view_comments_label"/>
+
     </LinearLayout>
 
 
     <!-- Nav Bar -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="12"
-        android:orientation="horizontal"
-        android:background="#bbbbbb">
-
-        <ImageButton
-            android:id="@+id/create_request_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_create_request"
-            android:contentDescription="@string/desc"
-            android:background="@android:color/transparent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
-        <ImageButton
-            android:id="@+id/home_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/create_request_button"
-            android:src="@drawable/ic_home"
-            android:contentDescription="@string/desc"
-            android:background="@android:color/transparent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
-        <ImageButton
-            android:id="@+id/profile_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/create_request_button"
-            android:src="@drawable/ic_profile"
-            android:contentDescription="@string/desc"
-            android:background="@android:color/transparent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
-    </RelativeLayout>
+    <include layout="@layout/navbar"/>
 </LinearLayout>

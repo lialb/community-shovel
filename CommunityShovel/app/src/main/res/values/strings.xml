@@ -6,6 +6,7 @@
     <string name="profile_button_text"> View Profile </string>
     <string name="desc"> image </string>
     <string name="your_profile_text"> Your Profile </string>
+    <string name="name_label"> Name: </string>
     <string name="first_name_label"> First Name: </string>
     <string name="last_name_label"> Last Name: </string>
     <string name="email_label"> Email: </string>
@@ -34,7 +35,7 @@
     <string name="bio_hint"> Bio </string>
     <string name="submit_button_text"> Submit </string>
 
-    <string name="profile_view_comments_label"><u>View Comments</u></string>
+    <string name="profile_view_comments_label">View Comments</string>
 
     <string name="confirm_text"> Confirm </string>
     <string name="cancel_text"> Cancel </string>

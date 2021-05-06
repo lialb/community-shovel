@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:weightSum="100">
 
     <!-- Map and overlay -->
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="88">
+        android:layout_weight="90">
         <!-- Map -->
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -70,46 +71,6 @@
                             android:layout_height="wrap_content"
                             android:textColor="#000"
                             android:textSize="20sp" />
-
-                    </LinearLayout>
-                    <!-- Upvotes -->
-                    <LinearLayout
-                        android:id="@+id/selection_upvotes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:orientation="horizontal"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="12dp"
-                        android:paddingRight="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:paddingRight="10dp"
-                            android:text="@string/upvotes_label"
-                            android:textColor="#000"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-                        <TextView
-                            android:id="@+id/selection_upvotes_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:textColor="#000"
-                            android:textSize="20sp" />
-                        <ImageButton
-                            android:id="@+id/selection_upvote_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="20dp"
-                            android:src="@drawable/ic_upvote"
-                            android:contentDescription="@string/desc"
-                            android:background="@android:color/transparent"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerInside"/>
 
                     </LinearLayout>
                     <!-- Info -->
@@ -185,31 +146,69 @@
                             android:textStyle="bold"
                             android:textSize="20sp"
                             android:layout_gravity="top"/>
-                        <Button
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/selection_view_volunteer_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="0dp"
-                            android:background="@android:color/transparent"
                             android:paddingTop="-5dp"
                             android:paddingBottom="-5dp"
                             android:layout_marginTop="-10dp"
                             android:layout_marginBottom="-10dp"
-                            android:textColor="#04f"
                             android:textAllCaps="false"
                             android:textSize="20sp"
                             android:text="None"/>
                     </LinearLayout>
-                    <Button
-                        android:id="@+id/selection_view_comments_button"
-                        android:layout_width="wrap_content"
+                    <!-- Upvotes -->
+                    <RelativeLayout
+                        android:id="@+id/selection_upvotes"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
-                        android:background="@android:color/transparent"
-                        android:textColor="#04f"
-                        android:textAllCaps="false"
-                        android:textSize="20sp"
-                        android:text="@string/view_comments_label" />
+                        android:layout_marginTop="12dp">
+
+                        <TextView
+                            android:id="@+id/selection_upvotes_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textColor="#000"
+                            android:textSize="24sp"
+                            android:layout_alignParentLeft="true"/>
+                        <ImageButton
+                            android:id="@+id/selection_upvote_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_toRightOf="@id/selection_upvotes_text"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_upvote"
+                            android:contentDescription="@string/desc"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerInside"
+                            android:background="@android:color/transparent" />
+
+                        <!-- view comments -->
+                        <ImageButton
+                            android:id="@+id/selection_view_comments_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toRightOf="@id/selection_upvote_button"
+
+                            android:background="@android:color/transparent"
+                            android:textColor="#04f"
+                            android:textAllCaps="false"
+                            android:textSize="20sp"
+                            android:src="@drawable/ic_view_comments" />
+                    </RelativeLayout>
+
+
 
                 </LinearLayout>
                 <Button
@@ -229,50 +228,6 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
+    <include layout="@layout/navbar"/>
 
-    <!-- Nav Bar -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="12"
-        android:orientation="horizontal"
-        android:background="#bbbbbb">
-
-        <ImageButton
-            android:id="@+id/create_request_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_create_request"
-            android:contentDescription="@string/desc"
-            android:background="@android:color/transparent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
-        <ImageButton
-            android:id="@+id/home_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/create_request_button"
-            android:src="@drawable/ic_home"
-            android:contentDescription="@string/desc"
-            android:background="@android:color/transparent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
-        <ImageButton
-            android:id="@+id/profile_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/create_request_button"
-            android:src="@drawable/ic_profile"
-            android:contentDescription="@string/desc"
-            android:background="@android:color/transparent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
-
-    </RelativeLayout>
 </LinearLayout>

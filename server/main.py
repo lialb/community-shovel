@@ -236,8 +236,8 @@ def create_account():
             'first_name' : body['firstName'], 
             'last_name' : body['lastName'], 
             'bio' : body['bio'],
-            'people_impacted' : 0,
-            'distance_shoveled' : 0
+            'people_impacted' : 15,
+            'distance_shoveled' : 40
         }
         db = firebase.database()
         # use email with periods replaced as commas because firebase does not allow periods in key

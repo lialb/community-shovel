@@ -217,8 +217,8 @@ public class CommentsPage  extends AppCompatActivity implements View.OnClickList
             btnTag.setId(-(commentChecknew.length()));
 
 
-            this.ll.addView(btnTag);
-            this.ll.addView(latestComment);
+            templlnew.addView(btnTag);
+            templlnew.addView(latestComment);
 
             GradientDrawable gd = new GradientDrawable();
             gd.setColor(0xFFFFFFFF);

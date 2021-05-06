@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -53,13 +56,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
-    private Button viewCommentsButton;
+    private ImageButton viewCommentsButton;
     private Button viewVolunteerProfileButton;
     private Button volunteerButton;
     private ImageButton upvoteButton;
     private User selectionVolunteer;
     private User activeUser;
     private HashMap<String, Request> requests = new HashMap<String, Request>();
+    private HashMap<String, Boolean> hasUpvoted = new HashMap<String, Boolean>();
     private GoogleMap map;
     private Boolean selectionVisible = false;
     private Marker curMarker = null;
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-        viewCommentsButton = (Button) findViewById(R.id.selection_view_comments_button);
+        viewCommentsButton = (ImageButton) findViewById(R.id.selection_view_comments_button);
         viewVolunteerProfileButton = (Button) findViewById(R.id.selection_view_volunteer_button);
         volunteerButton = (Button) findViewById(R.id.selection_volunteer_button);
         upvoteButton = (ImageButton) findViewById(R.id.selection_upvote_button);
@@ -160,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         double yCoord = request.getDouble("y_coord");
                                         Request r = new Request(requestId, creatorId, info, volunteers, comments, time, upvotes, status, xCoord, yCoord);
                                         requests.put(key, r);
+                                        hasUpvoted.put(key, false);
 
                                         final LatLng loc = new LatLng(xCoord, yCoord);
                                         Log.d(DEBUG, loc.toString());
@@ -167,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         Marker marker = map.addMarker(new MarkerOptions()
                                                 .position(loc)
                                                 .title("Request")
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.shovel)));
+                                                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker",95,127))));
                                         marker.setTag(key);
                                     } catch (JSONException e) {
                                         Log.e("JSON Exception", e.getMessage());
@@ -188,6 +193,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     /** Called when the user clicks a marker. */
@@ -232,7 +243,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showSelection(Marker marker) {
+        if (this.curMarker != null) {
+            this.curMarker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker",95,127)));
+            Request request;
+        }
         this.curMarker = marker;
+        this.curMarker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker_highlighted",95,127)));
         Request request;
         // find request based on the provided key
         try {
@@ -262,14 +278,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d(DEBUG, "Could not find address");
         }
         String statusText = "Incomplete";
+        textViewSelectionStatus.setTextColor(this.getResources().getColor(R.color.incomplete));
         if (request.getStatus() == 1) {
             statusText = "Partially complete";
+            textViewSelectionStatus.setTextColor(this.getResources().getColor(R.color.partially_complete));
         } else if (request.getStatus() == 2) {
             statusText = "Complete";
+            textViewSelectionStatus.setTextColor(this.getResources().getColor(R.color.complete));
         }
 
         textViewSelectionLocation.setText(selectionLocation);
         textViewSelectionUpvotes.setText(String.valueOf(request.getUpvotes()));
+        if (hasUpvoted.get((String)this.curMarker.getTag()) == true) {
+            textViewSelectionUpvotes.setTypeface(null, Typeface.BOLD);
+        } else {
+            textViewSelectionUpvotes.setTypeface(null, Typeface.NORMAL);
+        }
+
         textViewSelectionInfo.setText(request.getInfo());
         textViewSelectionStatus.setText(statusText);
 
@@ -289,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void hideSelection() {
         if (this.selectionVisible) {
+            this.curMarker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("mapmarker",95,127)));
             Animation slideDown = AnimationUtils.loadAnimation(this,
                     R.anim.slide_down);
             View selectionView = findViewById(R.id.selection);
@@ -322,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     selectionVolunteer = new User(volunteerId, firstName, lastName, bio,
                                             distanceShoveled, peopleImpacted);
                                     viewVolunteerProfileButton.setText(selectionVolunteer.getFirstName());
+                                    viewVolunteerProfileButton.setVisibility(View.VISIBLE);
                                 } catch (JSONException e) {
                                     Log.e("JSON Exception", e.getMessage());
                                 }
@@ -337,6 +364,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } catch(JSONException e) {
             Log.e("JSON Exception", e.getMessage());
+            viewVolunteerProfileButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -406,12 +434,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("active_user", activeUser);
             startActivity(intent);
         } else if (this.selectionVisible && v.getId() == R.id.selection_upvote_button) {
-            Log.d(DEBUG, "Upvoting selection");
-            upvoteSelection();
             TextView upvotesView = (TextView) findViewById(R.id.selection_upvotes_text);
-            upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
-            Request curRequest = requests.get((String)this.curMarker.getTag());
-            curRequest.setUpvotes(curRequest.getUpvotes() + 1);
+            if (hasUpvoted.get((String)this.curMarker.getTag()) == false) {
+                hasUpvoted.put((String)this.curMarker.getTag(), true);
+                Log.d(DEBUG, "Upvoting selection");
+                upvoteSelection();
+                upvotesView.setText(String.valueOf(Integer.parseInt((String)upvotesView.getText()) + 1));
+                upvotesView.setTypeface(upvotesView.getTypeface(), Typeface.BOLD);
+                Request curRequest = requests.get((String)this.curMarker.getTag());
+                curRequest.setUpvotes(curRequest.getUpvotes() + 1);
+            } else {
+                upvotesView.setTypeface(upvotesView.getTypeface(), Typeface.BOLD);
+            }
         } else if (this.selectionVisible && v.getId() == R.id.selection_view_volunteer_button) {
             Log.d(DEBUG, "Viewing volunteer profile");
             viewVolunteerProfile();

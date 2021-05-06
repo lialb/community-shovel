@@ -27,7 +27,7 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
     private ImageButton homeButton;
     private ImageButton createRequestButton;
     private ImageButton profileButton;
-    private Button editButton;
+    private ImageButton editButton;
     private Button viewCommentsButton;
     private User activeUser;
 
@@ -48,7 +48,7 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
         homeButton = (ImageButton) findViewById(R.id.home_button);
         createRequestButton = (ImageButton) findViewById(R.id.create_request_button);
         profileButton = (ImageButton) findViewById(R.id.profile_button);
-        editButton = (Button) findViewById(R.id.edit_profile_button);
+        editButton = (ImageButton) findViewById(R.id.edit_profile_button);
         Button logoutButton = (Button) findViewById(R.id.logout_button);
         viewCommentsButton = (Button) findViewById(R.id.your_profile_view_comments_button);
 
@@ -92,15 +92,13 @@ public class YourProfile extends AppCompatActivity implements View.OnClickListen
      * fillUserInfo populates the textViews on the Profile page with the user's data
      */
     public void fillUserInfo() {
-        TextView textViewFirstName = (TextView) findViewById(R.id.first_name_text);
-        TextView textViewLastName = (TextView) findViewById(R.id.last_name_text);
+        TextView textViewName = (TextView) findViewById(R.id.name_text);
         TextView textViewEmail = (TextView) findViewById(R.id.email_text);
         TextView textViewDistanceShoveled = (TextView) findViewById(R.id.distance_shoveled_text);
         TextView textViewPeopleImpacted = (TextView) findViewById(R.id.people_impacted_text);
         TextView textViewBio = (TextView) findViewById(R.id.bio_text);
 
-        textViewFirstName.setText(activeUser.getFirstName());
-        textViewLastName.setText(activeUser.getLastName());
+        textViewName.setText(activeUser.getFirstName() + " " + activeUser.getLastName());
         textViewEmail.setText(activeUser.getEmail().replace(',','.'));
         textViewDistanceShoveled.setText(activeUser.getDistanceShoveled()+"");
         textViewPeopleImpacted.setText(activeUser.getPeopleImpacted()+"");
